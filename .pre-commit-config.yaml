@@ -16,6 +16,7 @@ repos:
       - id: check-toml
       - id: check-case-conflict
       - id: check-added-large-files
+        exclude: poetry.lock
 
   # python code formatting
   - repo: https://github.com/psf/black
@@ -98,7 +99,7 @@ repos:
     hooks:
       - id: codespell
         args:
-          - --skip=logs/**,data/**,*.ipynb
+          - --skip=logs/**,data/**,*.ipynb,poetry.lock
           # - --ignore-words-list=abc,def
 
   # jupyter notebook cell output clearing

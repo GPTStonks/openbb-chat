@@ -5,7 +5,7 @@ from lightning import Callback
 from lightning.pytorch.loggers import Logger
 from omegaconf import DictConfig
 
-from src.utils import pylogger
+from openbb_chat.utils import pylogger
 
 log = pylogger.get_pylogger(__name__)
 

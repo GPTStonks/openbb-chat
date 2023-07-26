@@ -4,8 +4,8 @@ import pytest
 from hydra.core.hydra_config import HydraConfig
 from omegaconf import open_dict
 
-from src.eval import evaluate
-from src.train import train
+from openbb_chat.eval import evaluate
+from openbb_chat.train import train
 
 
 @pytest.mark.slow

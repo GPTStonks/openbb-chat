@@ -27,4 +27,4 @@ test-full: ## Run all tests
 	pytest
 
 train: ## Train the model
-	python src/train.py
+	python openbb_chat/train.py

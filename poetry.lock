@@ -8108,13 +8108,13 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 
 [[package]]
 name = "wandb"
-version = "0.15.5"
+version = "0.15.7"
 description = "A CLI and library for interacting with the Weights and Biases API."
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "wandb-0.15.5-py3-none-any.whl", hash = "sha256:8cfb8fdaaf0a35b636d0ca2c2c1262b0e3d835ac37f70fc3094b618f55f63f01"},
-    {file = "wandb-0.15.5.tar.gz", hash = "sha256:40c1d9ae501194bff408bc9c555865ffcccf08d2d65dd413547df0c17ed20cb5"},
+    {file = "wandb-0.15.7-py3-none-any.whl", hash = "sha256:65de59ea9c38e04536d59926487392fa87db76e3437b010cebe1b51a702b020c"},
+    {file = "wandb-0.15.7.tar.gz", hash = "sha256:af5adaf0529ed842d1facd31bc3839438e4ab397744a597f38327445edfaa89e"},
 ]
 
 [package.dependencies]
@@ -8715,4 +8715,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "85d87c1be5ca1392b840e684d319b048079c4b35322cdc5a49bf7968c10faddd"
+content-hash = "0b369fb991655f7e9a738916288d47580bbe97bd0c4d95cf13f01ed0a2640e10"

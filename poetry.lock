@@ -3181,13 +3181,13 @@ files = [
 
 [[package]]
 name = "lightning"
-version = "2.0.5"
+version = "2.0.6"
 description = "The Deep Learning framework to train, deploy, and ship AI products Lightning fast."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "lightning-2.0.5-py3-none-any.whl", hash = "sha256:965d692597ddf73364c74c99db58e11cf144f0e9a3052ec1b0474b4829c17c85"},
-    {file = "lightning-2.0.5.tar.gz", hash = "sha256:77df233129b29c11df7b5e071e24e29420d5efbdbbac9cb6fb4602b7b5afce8a"},
+    {file = "lightning-2.0.6-py3-none-any.whl", hash = "sha256:283fb8fd143fa30da1b2cadff4c38509a9b5b88518d0bcc69bab6d76a730865f"},
+    {file = "lightning-2.0.6.tar.gz", hash = "sha256:bff959f65eed2f626dd65e7b2cfd0d3ddcd0c4ca19ffc8f5f49a4ba4494ca528"},
 ]
 
 [package.dependencies]
@@ -3210,7 +3210,7 @@ lightning-utilities = ">=0.7.0,<2.0"
 numpy = ">=1.17.2,<3.0"
 packaging = ">=17.1,<25.0"
 psutil = "<7.0"
-pydantic = ">=1.7.4,<2.0.0"
+pydantic = ">=1.7.4,<2.1.0"
 python-multipart = ">=0.0.5,<2.0"
 pytorch-lightning = "*"
 PyYAML = ">=5.4,<8.0"
@@ -4381,10 +4381,7 @@ files = [
 ]
 
 [package.dependencies]
-numpy = [
-    {version = ">=1.21.0", markers = "python_version >= \"3.10\""},
-    {version = ">=1.23.2", markers = "python_version >= \"3.11\""},
-]
+numpy = {version = ">=1.21.0", markers = "python_version >= \"3.10\""}
 python-dateutil = ">=2.8.1"
 pytz = ">=2020.1"
 
@@ -7567,6 +7564,30 @@ description = "Tensors and Dynamic neural networks in Python with strong GPU acc
 optional = false
 python-versions = ">=3.8.0"
 files = [
+    {file = "torch-2.0.1+cu117-cp310-cp310-win_amd64.whl", hash = "sha256:deed82674691238ff9471fb7dd13a6eafc0c394cb6cdb249b483b4855c00276f"},
+]
+
+[package.dependencies]
+filelock = "*"
+jinja2 = "*"
+networkx = "*"
+sympy = "*"
+typing-extensions = "*"
+
+[package.extras]
+opt-einsum = ["opt-einsum (>=3.3)"]
+
+[package.source]
+type = "url"
+url = "https://download.pytorch.org/whl/cu117/torch-2.0.1%2Bcu117-cp310-cp310-win_amd64.whl"
+
+[[package]]
+name = "torch"
+version = "2.0.1+cu117"
+description = "Tensors and Dynamic neural networks in Python with strong GPU acceleration"
+optional = false
+python-versions = ">=3.8.0"
+files = [
     {file = "torch-2.0.1+cu117-cp311-cp311-linux_x86_64.whl", hash = "sha256:60b21e8db98f7365758a5c218f5dc533d84f046ed0876b4540ba5ba7ef6797d4"},
 ]
 
@@ -7584,6 +7605,30 @@ opt-einsum = ["opt-einsum (>=3.3)"]
 [package.source]
 type = "url"
 url = "https://download.pytorch.org/whl/cu117/torch-2.0.1%2Bcu117-cp311-cp311-linux_x86_64.whl"
+
+[[package]]
+name = "torch"
+version = "2.0.1+cu117"
+description = "Tensors and Dynamic neural networks in Python with strong GPU acceleration"
+optional = false
+python-versions = ">=3.8.0"
+files = [
+    {file = "torch-2.0.1+cu117-cp311-cp311-win_amd64.whl", hash = "sha256:a77ba4f4b13c8b6c2c863b84a98dde2ddf1feaad5f25700d41cf3236e11d2ee8"},
+]
+
+[package.dependencies]
+filelock = "*"
+jinja2 = "*"
+networkx = "*"
+sympy = "*"
+typing-extensions = "*"
+
+[package.extras]
+opt-einsum = ["opt-einsum (>=3.3)"]
+
+[package.source]
+type = "url"
+url = "https://download.pytorch.org/whl/cu117/torch-2.0.1%2Bcu117-cp311-cp311-win_amd64.whl"
 
 [[package]]
 name = "torchmetrics"
@@ -7643,6 +7688,29 @@ description = "image and video datasets and models for torch deep learning"
 optional = false
 python-versions = ">=3.8"
 files = [
+    {file = "torchvision-0.15.2+cu117-cp310-cp310-win_amd64.whl", hash = "sha256:6fe4d68a8a19b9c6a5d4c7b6e451b112af5a88c557ef9082b608757514653e8c"},
+]
+
+[package.dependencies]
+numpy = "*"
+pillow = ">=5.3.0,<8.3.dev0 || >=8.4.dev0"
+requests = "*"
+torch = "2.0.1"
+
+[package.extras]
+scipy = ["scipy"]
+
+[package.source]
+type = "url"
+url = "https://download.pytorch.org/whl/cu117/torchvision-0.15.2%2Bcu117-cp310-cp310-win_amd64.whl"
+
+[[package]]
+name = "torchvision"
+version = "0.15.2+cu117"
+description = "image and video datasets and models for torch deep learning"
+optional = false
+python-versions = ">=3.8"
+files = [
     {file = "torchvision-0.15.2+cu117-cp311-cp311-linux_x86_64.whl", hash = "sha256:ea0ba8978af212dfec1cdf4ef4d7bf7499251e97aa2758f7deae72df7ea2e2c3"},
 ]
 
@@ -7658,6 +7726,29 @@ scipy = ["scipy"]
 [package.source]
 type = "url"
 url = "https://download.pytorch.org/whl/cu117/torchvision-0.15.2%2Bcu117-cp311-cp311-linux_x86_64.whl"
+
+[[package]]
+name = "torchvision"
+version = "0.15.2+cu117"
+description = "image and video datasets and models for torch deep learning"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "torchvision-0.15.2+cu117-cp311-cp311-win_amd64.whl", hash = "sha256:79c144a2369dbb50feefad5822a3c2357dfd659c774c06970db399df8c74eede"},
+]
+
+[package.dependencies]
+numpy = "*"
+pillow = ">=5.3.0,<8.3.dev0 || >=8.4.dev0"
+requests = "*"
+torch = "2.0.1"
+
+[package.extras]
+scipy = ["scipy"]
+
+[package.source]
+type = "url"
+url = "https://download.pytorch.org/whl/cu117/torchvision-0.15.2%2Bcu117-cp311-cp311-win_amd64.whl"
 
 [[package]]
 name = "tornado"
@@ -8715,4 +8806,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "8b35d5140c910ffe3df15c7ef4a59ce4fe8ebaad1749517c9cd4e0e986a4b028"
+content-hash = "64c3ef108a583b36660235e4c1f04181dbde012a85398f1928f4c554cd3fb23a"

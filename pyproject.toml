@@ -28,7 +28,7 @@ exclude_lines = [
 name = "openbb-chat"
 version = "0.0.1"
 description = "Chat interface for OpenBB"
-authors = ["Daedalus <daedalus314@protonmail.com>"]
+authors = ["GPTStonks <gptstonks@gmail.com>"]
 readme = "README.md"
 packages = [{include = "openbb_chat"}]
 
@@ -64,9 +64,49 @@ accelerate = "^0.21.0"
 bitsandbytes = "^0.41.1"
 sentencepiece = "^0.1.99"
 guidance = "^0.0.64"
-pandas = ">=1.5.0,<2.0.0"
 
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "openbb-chat"
+version = "0.0.1.post1"
+description = "Deep learning package to support the chat interface for OpenBB"
+authors = [
+  { name="GPTStonks", email="gptstonks@gmail.com" }
+]
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+]
+dependencies = [
+  "openbb==3.*",
+  "torch==2.*",
+  "torchvision==0.*",
+  "lightning>=2.0.0",
+  "torchmetrics>=0.11.4",
+  "hydra-core==1.*",
+  "hydra-colorlog==1.*",
+  "hydra-optuna-sweeper==1.*",
+  "wandb>=0.15.5",
+  "pyrootutils<1.0.4",
+  "pre-commit>=3.3.3",
+  "rich>=12.6.0,<13.0.0",
+  "pytest>=7.4.0",
+  "transformers>=4.31.0",
+  "peft>=0.4.0",
+  "einops>=0.6.1",
+  "accelerate>=0.21.0",
+  "bitsandbytes>=0.41.1",
+  "sentencepiece>=0.1.99",
+  "guidance>=0.0.64",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/GPTStonks/openbb-chat"
+"Bug Tracker" = "https://github.com/GPTStonks/openbb-chat/issues"

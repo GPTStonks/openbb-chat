@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from typing import List, Tuple
 
 import torch
-from rich.progress import track
 from transformers import (
     AutoModel,
     AutoModelForSequenceClassification,
@@ -14,11 +13,12 @@ from transformers import (
 class AbstractZeroshotClassifier(ABC):
     """Abstract parent class of zero-shot classifiers.
 
-    It instantiates the necessary transformers models.
+    It instantiates the necessary transformers models and loads the keys into an embedding matrix.
     """
 
     def __init__(
         self,
+        keys: List[str],
         model_id: str,
         use_automodel_for_seq: bool = False,
         model_kwargs: dict = {},
@@ -29,11 +29,13 @@ class AbstractZeroshotClassifier(ABC):
         Args:
             model_id (`str`):
                 Name of the HF model to use.
-            model_type (`bool`):
+            keys (`List[str]`):
+                All possible classes, each one a short description.
+            use_automodel_for_seq (`bool`):
                 Whether to use `AutoModelForSequenceClassification` or `AutoModel` (default).
         """
+        self.keys = keys
         self.tokenizer = AutoTokenizer.from_pretrained(model_id, **tokenizer_kwargs)
-
         if not use_automodel_for_seq:
             self.model = AutoModel.from_pretrained(model_id, **model_kwargs)
         else:
@@ -42,14 +44,20 @@ class AbstractZeroshotClassifier(ABC):
             )
         self.model.eval()
 
-    def classify(self, query: str, keys: List[str]) -> Tuple[str, float, int]:
+        descr_embed_list = []
+        for descr in self.keys:
+            inputs = self.tokenizer(descr, return_tensors="pt")
+            descr_embed = self._compute_embed(inputs)
+            descr_embed_list.append(descr_embed)
+
+        self.descr_embed = torch.nn.functional.normalize(torch.cat(descr_embed_list), dim=1)
+
+    def classify(self, query: str) -> Tuple[str, float, int]:
         """Given a query, the most similar key is returned.
 
         Args:
             query (`str`):
                 Short text to classify into one key.
-            keys (`List[str]`):
-                All possible classes, each one a short description.
 
         Returns:
             `str`: The most similar key.
@@ -58,23 +66,11 @@ class AbstractZeroshotClassifier(ABC):
         """
 
         inputs = self.tokenizer(query, return_tensors="pt")
-        target_embed = self._compute_embed(inputs)
-
-        max_cosine_sim = -1  # min. possible cosine similarity
-        most_sim_descr = ""
-        selected_index = -1
-        for idx, descr in track(enumerate(keys), total=len(keys), description="Processing..."):
-            inputs = self.tokenizer(descr, return_tensors="pt")
-            descr_embed = self._compute_embed(inputs)
-
-            cosine_sim = torch.sum(
-                torch.nn.functional.normalize(target_embed)
-                * torch.nn.functional.normalize(descr_embed)
-            )
-            if cosine_sim > max_cosine_sim:
-                most_sim_descr = descr
-                max_cosine_sim = cosine_sim
-                selected_index = idx
+        target_embed = torch.nn.functional.normalize(self._compute_embed(inputs))
+        cosine_similarities = torch.sum(target_embed * self.descr_embed, dim=1)
+        selected_index = torch.argmax(cosine_similarities)
+        most_sim_descr = self.keys[selected_index]
+        max_cosine_sim = torch.max(cosine_similarities)
 
         return most_sim_descr, max_cosine_sim, selected_index
 

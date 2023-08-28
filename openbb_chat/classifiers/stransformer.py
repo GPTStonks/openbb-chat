@@ -1,3 +1,5 @@
+from typing import List
+
 import torch
 from transformers import PreTrainedModel
 
@@ -9,9 +11,15 @@ from openbb_chat.classifiers.abstract_zeroshot_classifier import (
 class STransformerZeroshotClassifier(AbstractZeroshotClassifier):
     """Zero-shot classifier based on `sentence-transformers`."""
 
-    def __init__(self, model_id: str = "sentence-transformers/all-MiniLM-L6-v2", *args, **kwargs):
+    def __init__(
+        self,
+        keys: List[str],
+        model_id: str = "sentence-transformers/all-MiniLM-L6-v2",
+        *args,
+        **kwargs,
+    ):
         """Override __init__ to set default model_id."""
-        super().__init__(model_id, *args, **kwargs)
+        super().__init__(keys, model_id, *args, **kwargs)
 
     def _compute_embed(self, inputs: dict) -> torch.Tensor:
         """Override parent method to use `sentence-transformers` models in HF."""

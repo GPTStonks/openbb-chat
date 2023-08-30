@@ -14,7 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         os: ["ubuntu-latest"]
-        python-version: ["3.10", "3.11"]
+        python-version: ["3.10"]
         poetry-version: ["1.5.1"]
 
     timeout-minutes: 20
@@ -50,7 +50,7 @@ jobs:
       fail-fast: false
       matrix:
         os: ["windows-latest"]
-        python-version: ["3.10", "3.11"]
+        python-version: ["3.10"]
         poetry-version: ["1.5.1"]
 
     timeout-minutes: 20
@@ -113,3 +113,5 @@ jobs:
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

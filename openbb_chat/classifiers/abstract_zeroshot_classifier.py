@@ -74,6 +74,30 @@ class AbstractZeroshotClassifier(ABC):
 
         return most_sim_descr, max_cosine_sim, selected_index
 
+    def rank_k(self, query: str, k: int = 3) -> Tuple[List[str], List[float], List[int]]:
+        """Given a query, the k most similar keys are returned, in descending order of scores.
+
+        Args:
+            query (`str`):
+                Short text to classify into one key.
+            k (`int`):
+                No. keys to return.
+
+        Returns:
+            `List[str]`: The most similar keys.
+            `List[float]`: The scores obtained.
+            `List[int]`: Indices of the key.
+        """
+        inputs = self.tokenizer(query, return_tensors="pt")
+        target_embed = torch.nn.functional.normalize(self._compute_embed(inputs))
+        cosine_similarities = torch.sum(target_embed * self.descr_embed, dim=1)
+        selected_scores, selected_indices = torch.topk(cosine_similarities, k=k)
+        selected_scores = selected_scores.cpu().numpy().tolist()
+        selected_indices = selected_indices.cpu().numpy().tolist()
+        most_sim_descrs = [self.keys[selected_index] for selected_index in selected_indices]
+
+        return most_sim_descrs, selected_scores, selected_indices
+
     @abstractmethod
     def _compute_embed(self, inputs: dict) -> torch.Tensor:
         """Computes the final embedding of the text given the tokenized inputs and the model.

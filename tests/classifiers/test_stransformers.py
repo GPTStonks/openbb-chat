@@ -52,7 +52,7 @@ def test_classify_clspooling(
     mocked_torch_cat,
     mocked_torch_normalize,
 ):
-    mocked_torch_sum.return_value = torch.tensor([1])
+    mocked_torch_sum.return_value = torch.tensor([1, 0])
 
     stransformer_zeroshot = STransformerZeroshotClassifier(
         ["dog", "cat"], model_id="BAAI/bge-base-en", pooling_type="cls"
@@ -67,3 +67,36 @@ def test_classify_clspooling(
     assert key == "dog"
     assert score == 1
     assert idx == 0
+
+
+@patch("torch.nn.functional.normalize")
+@patch("torch.cat")
+@patch("torch.clamp")
+@patch("torch.sum")
+@patch.object(AutoTokenizer, "from_pretrained")
+@patch.object(AutoModel, "from_pretrained")
+def test_rank(
+    mocked_automodel_frompretrained,
+    mocked_tokenizer_frompretrained,
+    mocked_torch_sum,
+    mocked_torch_clamp,
+    mocked_torch_cat,
+    mocked_torch_normalize,
+):
+    mocked_torch_sum.return_value = torch.tensor([1, 0])
+
+    stransformer_zeroshot = STransformerZeroshotClassifier(["dog", "cat"])
+    keys, scores, indices = stransformer_zeroshot.rank_k("Here is a dog", k=1)
+
+    mocked_automodel_frompretrained.assert_called_once_with(
+        "sentence-transformers/all-MiniLM-L6-v2"
+    )
+    mocked_tokenizer_frompretrained.assert_called_once_with(
+        "sentence-transformers/all-MiniLM-L6-v2"
+    )
+    mocked_torch_sum.assert_called()
+    mocked_torch_cat.assert_called()
+    mocked_torch_normalize.assert_called()
+    assert keys[0] == "dog"
+    assert scores[0] == 1
+    assert indices[0] == 0

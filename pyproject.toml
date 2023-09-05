@@ -64,6 +64,8 @@ accelerate = "^0.22.0"
 bitsandbytes = "^0.41.1"
 sentencepiece = "^0.1.99"
 guidance = "^0.0.64"
+auto-gptq = "^0.4.2"
+optimum = "^1.12.0"
 
 
 [build-system]
@@ -105,6 +107,8 @@ dependencies = [
   "bitsandbytes>=0.41.1",
   "sentencepiece>=0.1.99",
   "guidance>=0.0.64",
+  "auto-gpt>=0.4.2",
+  "optimum>=1.12.0",
 ]
 
 [project.urls]

@@ -57,10 +57,10 @@ pyrootutils = "<1.0.4"
 pre-commit = "^3.3.3"
 rich = ">=12.6.0,<13.0.0"
 pytest = "^7.4.0"
-transformers = {extras = ["torch"], version = "^4.31.0"}
-peft = "^0.4.0"
+transformers = {extras = ["torch"], version = "^4.33.0"}
+peft = "^0.5.0"
 einops = "^0.6.1"
-accelerate = "^0.21.0"
+accelerate = "^0.22.0"
 bitsandbytes = "^0.41.1"
 sentencepiece = "^0.1.99"
 guidance = "^0.0.64"
@@ -98,10 +98,10 @@ dependencies = [
   "pre-commit>=3.3.3",
   "rich>=12.6.0,<13.0.0",
   "pytest>=7.4.0",
-  "transformers>=4.31.0",
-  "peft>=0.4.0",
+  "transformers>=4.33.0",
+  "peft>=0.5.0",
   "einops>=0.6.1",
-  "accelerate>=0.21.0",
+  "accelerate>=0.22.0",
   "bitsandbytes>=0.41.1",
   "sentencepiece>=0.1.99",
   "guidance>=0.0.64",

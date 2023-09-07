@@ -57,7 +57,7 @@ pyrootutils = "<1.0.4"
 pre-commit = "^3.3.3"
 rich = ">=12.6.0,<13.0.0"
 pytest = "^7.4.0"
-transformers = {extras = ["torch"], version = "^4.33.0"}
+transformers = {extras = ["torch"], version = "^4.33.1"}
 peft = "^0.5.0"
 einops = "^0.6.1"
 accelerate = "^0.22.0"

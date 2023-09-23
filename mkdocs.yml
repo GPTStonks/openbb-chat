@@ -1,0 +1,22 @@
+site_name: OpenBB Chat Documentation
+repo_url: https://github.com/gptstonks/openbb-chat/
+site_url: https://gptstonks.github.io/openbb-chat/
+repo_name: GPTStonks/openbb-chat
+docs_dir: docs
+nav:
+  - Overview: index.md
+  # defer to gen-files + literate-nav
+  - Code Reference: reference/
+theme:
+  name: material
+extra:
+  version:
+    provider: mike
+plugins:
+  - search
+  - gen-files:
+      scripts:
+        - docs/gen_ref_pages.py
+  - literate-nav:
+      nav_file: SUMMARY.md
+  - mkdocstrings

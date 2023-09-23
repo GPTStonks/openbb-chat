@@ -27,11 +27,17 @@ ADD openbb_chat /openbb-chat/openbb_chat
 ADD README.md /openbb-chat/README.md
 RUN poetry install --only-root
 
-# Add other files
+# Add project root
 ADD .project-root /openbb-chat/.project-root
+
+# Add scripts, data and configs
 ADD scripts /openbb-chat/scripts/
 ADD data /openbb-chat/data/
 ADD configs /openbb-chat/configs/
+
+# Add mkdocs documentation
+ADD docs /openbb-chat/docs
+ADD mkdocs.yml /openbb-chat/mkdocs.yml
 
 # Tests
 ADD tests /openbb-chat/tests/

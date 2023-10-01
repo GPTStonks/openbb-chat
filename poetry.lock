@@ -3414,13 +3414,13 @@ requests = ">=2,<3"
 
 [[package]]
 name = "lightning"
-version = "2.0.8"
+version = "2.0.9.post0"
 description = "The Deep Learning framework to train, deploy, and ship AI products Lightning fast."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "lightning-2.0.8-py3-none-any.whl", hash = "sha256:42ccc2b622d5ee54322d8f96170da00abc35ace97ec8acaa25e709cf017fd0c8"},
-    {file = "lightning-2.0.8.tar.gz", hash = "sha256:db914e211b5c3b079a821be6e4344e72d0a729163676a65c4e00aae98390ae7b"},
+    {file = "lightning-2.0.9.post0-py3-none-any.whl", hash = "sha256:6b44697bebb7b59e6f3236d2e1c240381af492b6085ced378724c1f62defd50a"},
+    {file = "lightning-2.0.9.post0.tar.gz", hash = "sha256:93687b65bff28cedfc13c758bdfed982849c34f9bb506937c63275a9647586a0"},
 ]
 
 [package.dependencies]
@@ -3438,7 +3438,7 @@ fsspec = [
 ]
 inquirer = ">=2.10.0,<5.0"
 Jinja2 = "<5.0"
-lightning-cloud = ">=0.5.37"
+lightning-cloud = ">=0.5.38"
 lightning-utilities = ">=0.7.0,<2.0"
 numpy = ">=1.17.2,<3.0"
 packaging = ">=17.1,<25.0"
@@ -3452,7 +3452,7 @@ rich = ">=12.3.0,<15.0"
 starlette = "*"
 starsessions = ">=1.2.1,<2.0"
 torch = ">=1.11.0,<4.0"
-torchmetrics = ">=0.7.0,<2.0"
+torchmetrics = ">=0.7.0,<3.0"
 tqdm = ">=4.57.0,<6.0"
 traitlets = ">=5.3.0,<7.0"
 typing-extensions = ">=4.0.0,<6.0"
@@ -3462,43 +3462,43 @@ websocket-client = "<3.0"
 websockets = "<13.0"
 
 [package.extras]
-all = ["aiohttp (>=3.8.0,<4.0)", "deepspeed (>=0.8.2,<1.0)", "docker (>=5.0.0,<7.0)", "gym[classic-control] (>=0.17.0,<1.0)", "hydra-core (>=1.0.5,<2.0)", "ipython[all] (<9.0)", "jsonargparse[signatures] (>=4.18.0,<4.23.0)", "lightning-api-access (>=0.0.3)", "lightning-fabric (>=1.9.0)", "lightning-utilities (>=0.7.0,<1.0)", "lightning-utilities (>=0.8.0,<1.0)", "matplotlib (>3.1,<4.0)", "omegaconf (>=2.0.5,<3.0)", "panel (>=1.0.0,<2.0)", "pytorch-lightning (>=1.9.0)", "redis (>=4.0.1,<5.0)", "rich (>=12.3.0,<14.0)", "s3fs (>=2022.5.0,<2024.0)", "streamlit (>=1.13.0,<2.0)", "tensorboardX (>=2.2,<3.0)", "torchmetrics (>=0.10.0,<2.0)", "torchvision (>=0.12.0,<1.0)"]
-app-all = ["aiohttp (>=3.8.0,<4.0)", "docker (>=5.0.0,<7.0)", "lightning-api-access (>=0.0.3)", "lightning-fabric (>=1.9.0)", "panel (>=1.0.0,<2.0)", "pytorch-lightning (>=1.9.0)", "redis (>=4.0.1,<5.0)", "s3fs (>=2022.5.0,<2024.0)", "streamlit (>=1.13.0,<2.0)"]
-app-cloud = ["docker (>=5.0.0,<7.0)", "redis (>=4.0.1,<5.0)", "s3fs (>=2022.5.0,<2024.0)"]
+all = ["aiohttp (>=3.8.0,<4.0)", "deepspeed (>=0.8.2,<1.0)", "docker (>=5.0.0,<7.0)", "gym[classic-control] (>=0.17.0,<1.0)", "hydra-core (>=1.0.5,<2.0)", "ipython[all] (<9.0)", "jsonargparse[signatures] (>=4.18.0,<4.25.0)", "lightning-api-access (>=0.0.3)", "lightning-fabric (>=1.9.0)", "lightning-utilities (>=0.7.0,<1.0)", "lightning-utilities (>=0.8.0,<1.0)", "matplotlib (>3.1,<4.0)", "omegaconf (>=2.0.5,<3.0)", "panel (>=1.0.0,<2.0)", "pytorch-lightning (>=1.9.0)", "redis (>=4.0.1,<6.0)", "rich (>=12.3.0,<14.0)", "s3fs (>=2022.5.0,<2024.0)", "streamlit (>=1.13.0,<2.0)", "tensorboardX (>=2.2,<3.0)", "torchmetrics (>=0.10.0,<2.0)", "torchvision (>=0.12.0,<1.0)"]
+app-all = ["aiohttp (>=3.8.0,<4.0)", "docker (>=5.0.0,<7.0)", "lightning-api-access (>=0.0.3)", "lightning-fabric (>=1.9.0)", "panel (>=1.0.0,<2.0)", "pytorch-lightning (>=1.9.0)", "redis (>=4.0.1,<6.0)", "s3fs (>=2022.5.0,<2024.0)", "streamlit (>=1.13.0,<2.0)"]
+app-cloud = ["docker (>=5.0.0,<7.0)", "redis (>=4.0.1,<6.0)", "s3fs (>=2022.5.0,<2024.0)"]
 app-components = ["aiohttp (>=3.8.0,<4.0)", "lightning-api-access (>=0.0.3)", "lightning-fabric (>=1.9.0)", "pytorch-lightning (>=1.9.0)"]
-app-dev = ["aiohttp (>=3.8.0,<4.0)", "coverage (==7.3.0)", "docker (>=5.0.0,<7.0)", "httpx (==0.24.1)", "lightning-api-access (>=0.0.3)", "lightning-fabric (>=1.9.0)", "panel (>=1.0.0,<2.0)", "playwright (==1.36.0)", "psutil (<6.0)", "pympler", "pytest (==7.4.0)", "pytest-asyncio (==0.21.1)", "pytest-cov (==4.1.0)", "pytest-doctestplus (>=0.9.0)", "pytest-rerunfailures (<12.0)", "pytest-timeout (==2.1.0)", "pytorch-lightning (>=1.9.0)", "redis (>=4.0.1,<5.0)", "requests-mock (==1.11.0)", "s3fs (>=2022.5.0,<2024.0)", "setuptools (<69.0)", "streamlit (>=1.13.0,<2.0)", "trio (<0.22.0)"]
-app-extra = ["aiohttp (>=3.8.0,<4.0)", "docker (>=5.0.0,<7.0)", "lightning-api-access (>=0.0.3)", "lightning-fabric (>=1.9.0)", "panel (>=1.0.0,<2.0)", "pytorch-lightning (>=1.9.0)", "redis (>=4.0.1,<5.0)", "s3fs (>=2022.5.0,<2024.0)", "streamlit (>=1.13.0,<2.0)"]
-app-test = ["coverage (==7.3.0)", "httpx (==0.24.1)", "playwright (==1.36.0)", "psutil (<6.0)", "pympler", "pytest (==7.4.0)", "pytest-asyncio (==0.21.1)", "pytest-cov (==4.1.0)", "pytest-doctestplus (>=0.9.0)", "pytest-rerunfailures (<12.0)", "pytest-timeout (==2.1.0)", "requests-mock (==1.11.0)", "setuptools (<69.0)", "trio (<0.22.0)"]
+app-dev = ["aiohttp (>=3.8.0,<4.0)", "coverage (==7.3.0)", "docker (>=5.0.0,<7.0)", "httpx (==0.24.1)", "lightning-api-access (>=0.0.3)", "lightning-fabric (>=1.9.0)", "panel (>=1.0.0,<2.0)", "playwright (==1.36.0)", "psutil (<6.0)", "pympler", "pytest (==7.4.0)", "pytest-asyncio (==0.21.1)", "pytest-cov (==4.1.0)", "pytest-doctestplus (==0.9.0)", "pytest-rerunfailures (<12.0)", "pytest-timeout (==2.1.0)", "pytorch-lightning (>=1.9.0)", "redis (>=4.0.1,<6.0)", "requests-mock (==1.11.0)", "s3fs (>=2022.5.0,<2024.0)", "setuptools (<69.0)", "streamlit (>=1.13.0,<2.0)", "trio (<0.22.0)"]
+app-extra = ["aiohttp (>=3.8.0,<4.0)", "docker (>=5.0.0,<7.0)", "lightning-api-access (>=0.0.3)", "lightning-fabric (>=1.9.0)", "panel (>=1.0.0,<2.0)", "pytorch-lightning (>=1.9.0)", "redis (>=4.0.1,<6.0)", "s3fs (>=2022.5.0,<2024.0)", "streamlit (>=1.13.0,<2.0)"]
+app-test = ["coverage (==7.3.0)", "httpx (==0.24.1)", "playwright (==1.36.0)", "psutil (<6.0)", "pympler", "pytest (==7.4.0)", "pytest-asyncio (==0.21.1)", "pytest-cov (==4.1.0)", "pytest-doctestplus (==0.9.0)", "pytest-rerunfailures (<12.0)", "pytest-timeout (==2.1.0)", "requests-mock (==1.11.0)", "setuptools (<69.0)", "trio (<0.22.0)"]
 app-ui = ["panel (>=1.0.0,<2.0)", "streamlit (>=1.13.0,<2.0)"]
-cloud = ["docker (>=5.0.0,<7.0)", "redis (>=4.0.1,<5.0)", "s3fs (>=2022.5.0,<2024.0)"]
+cloud = ["docker (>=5.0.0,<7.0)", "redis (>=4.0.1,<6.0)", "s3fs (>=2022.5.0,<2024.0)"]
 components = ["aiohttp (>=3.8.0,<4.0)", "lightning-api-access (>=0.0.3)", "lightning-fabric (>=1.9.0)", "pytorch-lightning (>=1.9.0)"]
-dev = ["aiohttp (>=3.8.0,<4.0)", "click (==8.1.6)", "cloudpickle (>=1.3,<3.0)", "coverage (==7.3.0)", "deepspeed (>=0.8.2,<1.0)", "docker (>=5.0.0,<7.0)", "fastapi (<1.0)", "gym[classic-control] (>=0.17.0,<1.0)", "httpx (==0.24.1)", "hydra-core (>=1.0.5,<2.0)", "ipython[all] (<9.0)", "jsonargparse[signatures] (>=4.18.0,<4.23.0)", "lightning-api-access (>=0.0.3)", "lightning-fabric (>=1.9.0)", "lightning-utilities (>=0.7.0,<1.0)", "lightning-utilities (>=0.8.0,<1.0)", "matplotlib (>3.1,<4.0)", "omegaconf (>=2.0.5,<3.0)", "onnx (<2.0)", "onnxruntime (<2.0)", "pandas (>1.0,<3.0)", "panel (>=1.0.0,<2.0)", "playwright (==1.36.0)", "protobuf (<=3.20.1)", "psutil (<6.0)", "pympler", "pytest (==7.4.0)", "pytest-asyncio (==0.21.1)", "pytest-cov (==4.1.0)", "pytest-doctestplus (>=0.9.0)", "pytest-forked (==1.4.0)", "pytest-rerunfailures (<12.0)", "pytest-rerunfailures (==10.3)", "pytest-timeout (==2.1.0)", "pytorch-lightning (>=1.9.0)", "redis (>=4.0.1,<5.0)", "requests-mock (==1.11.0)", "rich (>=12.3.0,<14.0)", "s3fs (>=2022.5.0,<2024.0)", "scikit-learn (>0.22.1,<2.0)", "setuptools (<69.0)", "streamlit (>=1.13.0,<2.0)", "tensorboard (>=2.9.1,<3.0)", "tensorboardX (>=2.2,<3.0)", "torchmetrics (>=0.10.0,<2.0)", "torchvision (>=0.12.0,<1.0)", "trio (<0.22.0)", "uvicorn (<1.0)"]
+dev = ["aiohttp (>=3.8.0,<4.0)", "click (==8.1.6)", "cloudpickle (>=1.3,<3.0)", "coverage (==7.3.0)", "deepspeed (>=0.8.2,<1.0)", "docker (>=5.0.0,<7.0)", "fastapi (<1.0)", "gym[classic-control] (>=0.17.0,<1.0)", "httpx (==0.24.1)", "hydra-core (>=1.0.5,<2.0)", "ipython[all] (<9.0)", "jsonargparse[signatures] (>=4.18.0,<4.25.0)", "lightning-api-access (>=0.0.3)", "lightning-fabric (>=1.9.0)", "lightning-utilities (>=0.7.0,<1.0)", "lightning-utilities (>=0.8.0,<1.0)", "matplotlib (>3.1,<4.0)", "omegaconf (>=2.0.5,<3.0)", "onnx (<2.0)", "onnxruntime (<2.0)", "pandas (>1.0,<3.0)", "panel (>=1.0.0,<2.0)", "playwright (==1.36.0)", "protobuf (<3.21.0)", "psutil (<6.0)", "pympler", "pytest (==7.4.0)", "pytest-asyncio (==0.21.1)", "pytest-cov (==4.1.0)", "pytest-doctestplus (==0.9.0)", "pytest-forked (==1.4.0)", "pytest-rerunfailures (<12.0)", "pytest-rerunfailures (==10.3)", "pytest-timeout (==2.1.0)", "pytorch-lightning (>=1.9.0)", "redis (>=4.0.1,<6.0)", "requests-mock (==1.11.0)", "rich (>=12.3.0,<14.0)", "s3fs (>=2022.5.0,<2024.0)", "scikit-learn (>0.22.1,<2.0)", "setuptools (<69.0)", "streamlit (>=1.13.0,<2.0)", "tensorboard (>=2.9.1,<3.0)", "tensorboardX (>=2.2,<3.0)", "torchmetrics (>=0.10.0,<2.0)", "torchvision (>=0.12.0,<1.0)", "trio (<0.22.0)", "uvicorn (<1.0)"]
 examples = ["gym[classic-control] (>=0.17.0,<1.0)", "ipython[all] (<9.0)", "lightning-utilities (>=0.7.0,<1.0)", "lightning-utilities (>=0.8.0,<1.0)", "torchmetrics (>=0.10.0,<2.0)", "torchvision (>=0.12.0,<1.0)"]
-extra = ["aiohttp (>=3.8.0,<4.0)", "docker (>=5.0.0,<7.0)", "hydra-core (>=1.0.5,<2.0)", "jsonargparse[signatures] (>=4.18.0,<4.23.0)", "lightning-api-access (>=0.0.3)", "lightning-fabric (>=1.9.0)", "matplotlib (>3.1,<4.0)", "omegaconf (>=2.0.5,<3.0)", "panel (>=1.0.0,<2.0)", "pytorch-lightning (>=1.9.0)", "redis (>=4.0.1,<5.0)", "rich (>=12.3.0,<14.0)", "s3fs (>=2022.5.0,<2024.0)", "streamlit (>=1.13.0,<2.0)", "tensorboardX (>=2.2,<3.0)"]
+extra = ["aiohttp (>=3.8.0,<4.0)", "docker (>=5.0.0,<7.0)", "hydra-core (>=1.0.5,<2.0)", "jsonargparse[signatures] (>=4.18.0,<4.25.0)", "lightning-api-access (>=0.0.3)", "lightning-fabric (>=1.9.0)", "matplotlib (>3.1,<4.0)", "omegaconf (>=2.0.5,<3.0)", "panel (>=1.0.0,<2.0)", "pytorch-lightning (>=1.9.0)", "redis (>=4.0.1,<6.0)", "rich (>=12.3.0,<14.0)", "s3fs (>=2022.5.0,<2024.0)", "streamlit (>=1.13.0,<2.0)", "tensorboardX (>=2.2,<3.0)"]
 fabric-all = ["deepspeed (>=0.8.2,<1.0)", "lightning-utilities (>=0.8.0,<1.0)", "torchmetrics (>=0.10.0,<2.0)", "torchvision (>=0.12.0,<1.0)"]
 fabric-dev = ["click (==8.1.6)", "coverage (==7.3.0)", "deepspeed (>=0.8.2,<1.0)", "lightning-utilities (>=0.8.0,<1.0)", "pytest (==7.4.0)", "pytest-cov (==4.1.0)", "pytest-rerunfailures (==10.3)", "tensorboardX (>=2.2,<3.0)", "torchmetrics (>=0.10.0,<2.0)", "torchvision (>=0.12.0,<1.0)"]
 fabric-examples = ["lightning-utilities (>=0.8.0,<1.0)", "torchmetrics (>=0.10.0,<2.0)", "torchvision (>=0.12.0,<1.0)"]
 fabric-strategies = ["deepspeed (>=0.8.2,<1.0)"]
 fabric-test = ["click (==8.1.6)", "coverage (==7.3.0)", "pytest (==7.4.0)", "pytest-cov (==4.1.0)", "pytest-rerunfailures (==10.3)", "tensorboardX (>=2.2,<3.0)"]
-pytorch-all = ["deepspeed (>=0.8.2,<1.0)", "gym[classic-control] (>=0.17.0,<1.0)", "hydra-core (>=1.0.5,<2.0)", "ipython[all] (<9.0)", "jsonargparse[signatures] (>=4.18.0,<4.23.0)", "lightning-utilities (>=0.7.0,<1.0)", "matplotlib (>3.1,<4.0)", "omegaconf (>=2.0.5,<3.0)", "rich (>=12.3.0,<14.0)", "tensorboardX (>=2.2,<3.0)", "torchmetrics (>=0.10.0,<2.0)", "torchvision (>=0.12.0,<1.0)"]
-pytorch-dev = ["cloudpickle (>=1.3,<3.0)", "coverage (==7.3.0)", "deepspeed (>=0.8.2,<1.0)", "fastapi (<1.0)", "gym[classic-control] (>=0.17.0,<1.0)", "hydra-core (>=1.0.5,<2.0)", "ipython[all] (<9.0)", "jsonargparse[signatures] (>=4.18.0,<4.23.0)", "lightning-utilities (>=0.7.0,<1.0)", "matplotlib (>3.1,<4.0)", "omegaconf (>=2.0.5,<3.0)", "onnx (<2.0)", "onnxruntime (<2.0)", "pandas (>1.0,<3.0)", "protobuf (<=3.20.1)", "psutil (<6.0)", "pytest (==7.4.0)", "pytest-cov (==4.1.0)", "pytest-forked (==1.4.0)", "pytest-rerunfailures (==10.3)", "rich (>=12.3.0,<14.0)", "scikit-learn (>0.22.1,<2.0)", "tensorboard (>=2.9.1,<3.0)", "tensorboardX (>=2.2,<3.0)", "torchmetrics (>=0.10.0,<2.0)", "torchvision (>=0.12.0,<1.0)", "uvicorn (<1.0)"]
+pytorch-all = ["deepspeed (>=0.8.2,<1.0)", "gym[classic-control] (>=0.17.0,<1.0)", "hydra-core (>=1.0.5,<2.0)", "ipython[all] (<9.0)", "jsonargparse[signatures] (>=4.18.0,<4.25.0)", "lightning-utilities (>=0.7.0,<1.0)", "matplotlib (>3.1,<4.0)", "omegaconf (>=2.0.5,<3.0)", "rich (>=12.3.0,<14.0)", "tensorboardX (>=2.2,<3.0)", "torchmetrics (>=0.10.0,<2.0)", "torchvision (>=0.12.0,<1.0)"]
+pytorch-dev = ["cloudpickle (>=1.3,<3.0)", "coverage (==7.3.0)", "deepspeed (>=0.8.2,<1.0)", "fastapi (<1.0)", "gym[classic-control] (>=0.17.0,<1.0)", "hydra-core (>=1.0.5,<2.0)", "ipython[all] (<9.0)", "jsonargparse[signatures] (>=4.18.0,<4.25.0)", "lightning-utilities (>=0.7.0,<1.0)", "matplotlib (>3.1,<4.0)", "omegaconf (>=2.0.5,<3.0)", "onnx (<2.0)", "onnxruntime (<2.0)", "pandas (>1.0,<3.0)", "protobuf (<3.21.0)", "psutil (<6.0)", "pytest (==7.4.0)", "pytest-cov (==4.1.0)", "pytest-forked (==1.4.0)", "pytest-rerunfailures (==10.3)", "rich (>=12.3.0,<14.0)", "scikit-learn (>0.22.1,<2.0)", "tensorboard (>=2.9.1,<3.0)", "tensorboardX (>=2.2,<3.0)", "torchmetrics (>=0.10.0,<2.0)", "torchvision (>=0.12.0,<1.0)", "uvicorn (<1.0)"]
 pytorch-examples = ["gym[classic-control] (>=0.17.0,<1.0)", "ipython[all] (<9.0)", "lightning-utilities (>=0.7.0,<1.0)", "torchmetrics (>=0.10.0,<2.0)", "torchvision (>=0.12.0,<1.0)"]
-pytorch-extra = ["hydra-core (>=1.0.5,<2.0)", "jsonargparse[signatures] (>=4.18.0,<4.23.0)", "matplotlib (>3.1,<4.0)", "omegaconf (>=2.0.5,<3.0)", "rich (>=12.3.0,<14.0)", "tensorboardX (>=2.2,<3.0)"]
+pytorch-extra = ["hydra-core (>=1.0.5,<2.0)", "jsonargparse[signatures] (>=4.18.0,<4.25.0)", "matplotlib (>3.1,<4.0)", "omegaconf (>=2.0.5,<3.0)", "rich (>=12.3.0,<14.0)", "tensorboardX (>=2.2,<3.0)"]
 pytorch-strategies = ["deepspeed (>=0.8.2,<1.0)"]
-pytorch-test = ["cloudpickle (>=1.3,<3.0)", "coverage (==7.3.0)", "fastapi (<1.0)", "onnx (<2.0)", "onnxruntime (<2.0)", "pandas (>1.0,<3.0)", "protobuf (<=3.20.1)", "psutil (<6.0)", "pytest (==7.4.0)", "pytest-cov (==4.1.0)", "pytest-forked (==1.4.0)", "pytest-rerunfailures (==10.3)", "scikit-learn (>0.22.1,<2.0)", "tensorboard (>=2.9.1,<3.0)", "uvicorn (<1.0)"]
+pytorch-test = ["cloudpickle (>=1.3,<3.0)", "coverage (==7.3.0)", "fastapi (<1.0)", "onnx (<2.0)", "onnxruntime (<2.0)", "pandas (>1.0,<3.0)", "protobuf (<3.21.0)", "psutil (<6.0)", "pytest (==7.4.0)", "pytest-cov (==4.1.0)", "pytest-forked (==1.4.0)", "pytest-rerunfailures (==10.3)", "scikit-learn (>0.22.1,<2.0)", "tensorboard (>=2.9.1,<3.0)", "uvicorn (<1.0)"]
 strategies = ["deepspeed (>=0.8.2,<1.0)"]
-test = ["click (==8.1.6)", "cloudpickle (>=1.3,<3.0)", "coverage (==7.3.0)", "fastapi (<1.0)", "httpx (==0.24.1)", "onnx (<2.0)", "onnxruntime (<2.0)", "pandas (>1.0,<3.0)", "playwright (==1.36.0)", "protobuf (<=3.20.1)", "psutil (<6.0)", "pympler", "pytest (==7.4.0)", "pytest-asyncio (==0.21.1)", "pytest-cov (==4.1.0)", "pytest-doctestplus (>=0.9.0)", "pytest-forked (==1.4.0)", "pytest-rerunfailures (<12.0)", "pytest-rerunfailures (==10.3)", "pytest-timeout (==2.1.0)", "requests-mock (==1.11.0)", "scikit-learn (>0.22.1,<2.0)", "setuptools (<69.0)", "tensorboard (>=2.9.1,<3.0)", "tensorboardX (>=2.2,<3.0)", "trio (<0.22.0)", "uvicorn (<1.0)"]
+test = ["click (==8.1.6)", "cloudpickle (>=1.3,<3.0)", "coverage (==7.3.0)", "fastapi (<1.0)", "httpx (==0.24.1)", "onnx (<2.0)", "onnxruntime (<2.0)", "pandas (>1.0,<3.0)", "playwright (==1.36.0)", "protobuf (<3.21.0)", "psutil (<6.0)", "pympler", "pytest (==7.4.0)", "pytest-asyncio (==0.21.1)", "pytest-cov (==4.1.0)", "pytest-doctestplus (==0.9.0)", "pytest-forked (==1.4.0)", "pytest-rerunfailures (<12.0)", "pytest-rerunfailures (==10.3)", "pytest-timeout (==2.1.0)", "requests-mock (==1.11.0)", "scikit-learn (>0.22.1,<2.0)", "setuptools (<69.0)", "tensorboard (>=2.9.1,<3.0)", "tensorboardX (>=2.2,<3.0)", "trio (<0.22.0)", "uvicorn (<1.0)"]
 ui = ["panel (>=1.0.0,<2.0)", "streamlit (>=1.13.0,<2.0)"]
 
 [[package]]
 name = "lightning-cloud"
-version = "0.5.37"
+version = "0.5.39"
 description = "Lightning Cloud"
 optional = false
 python-versions = ">=3.7.0"
 files = [
-    {file = "lightning_cloud-0.5.37-py3-none-any.whl", hash = "sha256:2556d1294b23f3cc3f047acd62cd0a26c2daa84896b0c34e46fa6b2a142848db"},
-    {file = "lightning_cloud-0.5.37.tar.gz", hash = "sha256:1e0d577e1696e3aef974c589c4bd1ed22c70a332750863a393ec3949166137e0"},
+    {file = "lightning_cloud-0.5.39-py3-none-any.whl", hash = "sha256:83528b5fc161aabf0aa17882f645de1f832a9528b348a46d15124b4b9e3cb0bb"},
+    {file = "lightning_cloud-0.5.39.tar.gz", hash = "sha256:20e5350846eff73f0dc508cdff38c4baf7f1a168ab5d99a7db871896d6691c7d"},
 ]
 
 [package.dependencies]
@@ -5879,13 +5879,13 @@ files = [
 
 [[package]]
 name = "pyrootutils"
-version = "1.0.3"
+version = "1.0.4"
 description = "Simple package for easy project root setup"
 optional = false
 python-versions = ">=3.7.0"
 files = [
-    {file = "pyrootutils-1.0.3-py3-none-any.whl", hash = "sha256:4c227ba2f7a2819ceee19256eb708884c23eee8a5397ce4241e38305ab35d73e"},
-    {file = "pyrootutils-1.0.3.tar.gz", hash = "sha256:026ba2d200c7a1db8c99a815ce5851e7cbdf7e7cfb9bc08ce61ac2e179797066"},
+    {file = "pyrootutils-1.0.4-py3-none-any.whl", hash = "sha256:8bbf25425278693168ae03b167aa6509422dc21853a6ee01d5d5e40601a89f90"},
+    {file = "pyrootutils-1.0.4.tar.gz", hash = "sha256:f58aac67147bbab20938b7b783cb2f4670d6329a33c6640233854976538fc5f2"},
 ]
 
 [package.dependencies]
@@ -5929,13 +5929,13 @@ files = [
 
 [[package]]
 name = "pytest"
-version = "7.4.1"
+version = "7.4.2"
 description = "pytest: simple powerful testing with Python"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "pytest-7.4.1-py3-none-any.whl", hash = "sha256:460c9a59b14e27c602eb5ece2e47bec99dc5fc5f6513cf924a7d03a578991b1f"},
-    {file = "pytest-7.4.1.tar.gz", hash = "sha256:2f2301e797521b23e4d2585a0a3d7b5e50fdddaaf7e7d6773ea26ddb17c213ab"},
+    {file = "pytest-7.4.2-py3-none-any.whl", hash = "sha256:1d881c6124e08ff0a1bb75ba3ec0bfd8b5354a01c194ddd5a0a870a48d99b002"},
+    {file = "pytest-7.4.2.tar.gz", hash = "sha256:a766259cfab564a2ad52cb1aae1b881a75c3eb7e34ca3779697c23ed47c47069"},
 ]
 
 [package.dependencies]
@@ -8182,17 +8182,16 @@ test = ["argcomplete (>=2.0)", "pre-commit", "pytest", "pytest-mock"]
 
 [[package]]
 name = "transformers"
-version = "4.33.0"
+version = "4.33.3"
 description = "State-of-the-art Machine Learning for JAX, PyTorch and TensorFlow"
 optional = false
 python-versions = ">=3.8.0"
 files = [
-    {file = "transformers-4.33.0-py3-none-any.whl", hash = "sha256:c3b7f818e90c4361bb50ad541ab94e28329aa0d97a1c45ffafa5a8b693bc73ec"},
-    {file = "transformers-4.33.0.tar.gz", hash = "sha256:9e894dc62cfb02d92c1201e57219765b53be6486a306db8b60414e93fc2e39a5"},
+    {file = "transformers-4.33.3-py3-none-any.whl", hash = "sha256:7150bbf6781ddb3338ce7d74f4d6f557e6c236a0a1dd3de57412214caae7fd71"},
+    {file = "transformers-4.33.3.tar.gz", hash = "sha256:8ea7c92310dee7c63b14766ce928218f7a9177960b2487ac018c91ae621af03e"},
 ]
 
 [package.dependencies]
-accelerate = {version = ">=0.20.3", optional = true, markers = "extra == \"torch\""}
 filelock = "*"
 huggingface-hub = ">=0.15.1,<1.0"
 numpy = ">=1.17"
@@ -8204,7 +8203,6 @@ requests = "*"
 safetensors = ">=0.3.1"
 sentencepiece = {version = ">=0.1.91,<0.1.92 || >0.1.92", optional = true, markers = "extra == \"sentencepiece\""}
 tokenizers = ">=0.11.1,<0.11.3 || >0.11.3,<0.14"
-torch = {version = ">=1.10,<1.12.0 || >1.12.0", optional = true, markers = "extra == \"torch\""}
 tqdm = ">=4.27"
 
 [package.extras]
@@ -8565,13 +8563,13 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 
 [[package]]
 name = "wandb"
-version = "0.15.9"
-description = "A CLI and library for interacting with the Weights and Biases API."
+version = "0.15.11"
+description = "A CLI and library for interacting with the Weights & Biases API."
 optional = false
 python-versions = ">=3.6"
 files = [
-    {file = "wandb-0.15.9-py3-none-any.whl", hash = "sha256:879365e5fcd00444874785b02f56f25973e7064420d9de3cc08a9948ecdf565b"},
-    {file = "wandb-0.15.9.tar.gz", hash = "sha256:3c41f59e72f3116177705d88d6049f443e238fa1451d1dda6fa89e055caf230f"},
+    {file = "wandb-0.15.11-py3-none-any.whl", hash = "sha256:d0ea8b683c1416b626de0a57800687fb6c36307b3e1a455b7ed4dee6e342f391"},
+    {file = "wandb-0.15.11.tar.gz", hash = "sha256:d686ddb602891b8c63b5a8fffd7585d43ca441025cea2ee0bb01d06e35bfbdb1"},
 ]
 
 [package.dependencies]
@@ -8593,11 +8591,11 @@ async = ["httpx (>=0.22.0)"]
 aws = ["boto3"]
 azure = ["azure-identity", "azure-storage-blob"]
 gcp = ["google-cloud-storage"]
-grpc = ["grpcio (>=1.27.2)"]
 kubeflow = ["google-cloud-storage", "kubernetes", "minio", "sh"]
-launch = ["awscli", "azure-containerregistry", "azure-identity", "azure-storage-blob", "boto3", "botocore", "chardet", "google-auth", "google-cloud-artifact-registry", "google-cloud-compute", "google-cloud-storage", "iso8601", "kubernetes", "nbconvert", "nbformat", "optuna", "typing-extensions"]
+launch = ["PyYAML (>=6.0.0)", "awscli", "azure-containerregistry", "azure-identity", "azure-storage-blob", "boto3", "botocore", "chardet", "google-auth", "google-cloud-artifact-registry", "google-cloud-compute", "google-cloud-storage", "iso8601", "kubernetes", "nbconvert", "nbformat", "optuna", "typing-extensions"]
 media = ["bokeh", "moviepy", "numpy", "pillow", "plotly", "rdkit-pypi", "soundfile"]
 models = ["cloudpickle"]
+nexus = ["wandb-core (>=0.16.0b1)"]
 perf = ["orjson"]
 sweeps = ["sweeps (>=0.2.0)"]
 
@@ -9267,4 +9265,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "3.10.*"
-content-hash = "88a7583b25bdbba1ce23b4080110170d6b47b7f8631ff023353342308400e307"
+content-hash = "231d5a6c9a217aac80d16f6d790b1bdb450a6a8dc72e2804ba3d1f1e013b4757"

@@ -1,3 +1,5 @@
+import os
+import tempfile
 from unittest.mock import patch
 
 import pytest
@@ -100,3 +102,35 @@ def test_rank(
     assert keys[0] == "dog"
     assert scores[0] == 1
     assert indices[0] == 0
+
+
+@patch("torch.nn.functional.normalize")
+@patch("torch.clamp")
+@patch("torch.sum")
+@patch.object(AutoTokenizer, "from_pretrained")
+@patch.object(AutoModel, "from_pretrained")
+def test_classify_embeddings(
+    mocked_automodel_frompretrained,
+    mocked_tokenizer_frompretrained,
+    mocked_torch_sum,
+    mocked_torch_clamp,
+    mocked_torch_normalize,
+):
+    mocked_torch_sum.return_value = torch.tensor([1])
+    temp_embeds_file = os.path.join(tempfile.gettempdir(), "embeds.pt")
+    torch.save(torch.randn((6, 10)), temp_embeds_file)
+
+    stransformer_zeroshot = STransformerZeroshotClassifier(temp_embeds_file)
+    key, score, idx = stransformer_zeroshot.classify("Here is a dog")
+
+    mocked_automodel_frompretrained.assert_called_once_with(
+        "sentence-transformers/all-MiniLM-L6-v2"
+    )
+    mocked_tokenizer_frompretrained.assert_called_once_with(
+        "sentence-transformers/all-MiniLM-L6-v2"
+    )
+    mocked_torch_sum.assert_called()
+    mocked_torch_normalize.assert_called()
+    assert key.shape == (10,)
+    assert score == 1
+    assert idx == 0

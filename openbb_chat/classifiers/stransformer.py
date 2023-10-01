@@ -13,7 +13,7 @@ class STransformerZeroshotClassifier(AbstractZeroshotClassifier):
 
     def __init__(
         self,
-        keys: List[str],
+        keys: List[str] | str,
         model_id: str = "sentence-transformers/all-MiniLM-L6-v2",
         pooling_type: str = "average",
         *args,

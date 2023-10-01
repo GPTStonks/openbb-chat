@@ -72,3 +72,7 @@ The model [Griffin-3B-GPTQ](https://huggingface.co/daedalus314/Griffin-3B-GPTQ) 
 ## Sample usage with pre-trained models
 
 In the repository https://github.com/GPTStonks/api `openbb-chat` is used to perform [retrieval-augmented generation](https://arxiv.org/abs/2005.11401) (RAG) with OpenBB's official documentation and pre-trained models. In particular, the `classifiers` modules are used to find the appropriate function in OpenBB and the `llms` modules are used to complete the function call.
+
+## License
+
+The Dockerfile is based on the image `nvidia/cuda`, which states that the following notice must be included: *This software contains source code provided by NVIDIA Corporation.*

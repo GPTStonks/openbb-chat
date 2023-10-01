@@ -18,7 +18,7 @@ class AbstractZeroshotClassifier(ABC):
 
     def __init__(
         self,
-        keys: List[str],
+        keys: List[str] | str,
         model_id: str,
         use_automodel_for_seq: bool = False,
         model_kwargs: dict = {},
@@ -27,14 +27,23 @@ class AbstractZeroshotClassifier(ABC):
         """Init method.
 
         Args:
+            keys (`List[str] | str`):
+                All possible classes. There are two possibilities:
+                - If a list is provided, each element is a short description to match against it.
+                - If a string is provided, it is assumed to be the path to a .pt file with the embeddings of the descriptions. Shape `(num_classes, embedding_size)`.
             model_id (`str`):
-                Name of the HF model to use.
-            keys (`List[str]`):
-                All possible classes, each one a short description.
+                Name of the Hugging Face model to use to compute the text embeddings.
             use_automodel_for_seq (`bool`):
-                Whether to use `AutoModelForSequenceClassification` or `AutoModel` (default).
+                Whether to use `AutoModelForSequenceClassification` (`True`) or `AutoModel` (`False`).
+            model_kwargs (`dict`):
+                Keyword arguments passed to Hugging Face `AutoModel.from_pretrained` or `AutoModelForSequenceClassification.from_pretrained` method.
+            tokenizer_kwargs (`dict`):
+                Keyword arguments passed to Hugging Face `AutoTokenizer.from_pretrained` method.
         """
-        self.keys = keys
+        if isinstance(keys, str):
+            self.keys = torch.load(keys)
+        else:
+            self.keys = keys
         self.tokenizer = AutoTokenizer.from_pretrained(model_id, **tokenizer_kwargs)
         if not use_automodel_for_seq:
             self.model = AutoModel.from_pretrained(model_id, **model_kwargs)
@@ -44,13 +53,16 @@ class AbstractZeroshotClassifier(ABC):
             )
         self.model.eval()
 
-        descr_embed_list = []
-        for descr in self.keys:
-            inputs = self.tokenizer(descr, return_tensors="pt")
-            descr_embed = self._compute_embed(inputs)
-            descr_embed_list.append(descr_embed)
+        if not isinstance(self.keys, torch.Tensor):
+            descr_embed_list = []
+            for descr in self.keys:
+                inputs = self.tokenizer(descr, return_tensors="pt")
+                descr_embed = self._compute_embed(inputs)
+                descr_embed_list.append(descr_embed)
 
-        self.descr_embed = torch.nn.functional.normalize(torch.cat(descr_embed_list), dim=1)
+            self.descr_embed = torch.nn.functional.normalize(torch.cat(descr_embed_list), dim=1)
+        else:
+            self.descr_embed = self.keys
 
     def classify(self, query: str) -> Tuple[str, float, int]:
         """Given a query, the most similar key is returned.
@@ -60,11 +72,10 @@ class AbstractZeroshotClassifier(ABC):
                 Short text to classify into one key.
 
         Returns:
-            `str`: The most similar key.
+            `str | torch.Tensor`: The most similar key. A `torch.Tensor` is returned in `keys` is initialized from a .pt file.
             `float`: The score obtained.
             `int`: Index of the key.
         """
-
         inputs = self.tokenizer(query, return_tensors="pt")
         target_embed = torch.nn.functional.normalize(self._compute_embed(inputs))
         cosine_similarities = torch.sum(target_embed * self.descr_embed, dim=1)

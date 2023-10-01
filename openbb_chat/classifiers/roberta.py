@@ -11,7 +11,7 @@ from openbb_chat.classifiers.abstract_zeroshot_classifier import (
 class RoBERTaZeroshotClassifier(AbstractZeroshotClassifier):
     """Zero-shot classifier based on `sentence-transformers`."""
 
-    def __init__(self, keys: List[str], model_id: str = "roberta-base", *args, **kwargs):
+    def __init__(self, keys: List[str] | str, model_id: str = "roberta-base", *args, **kwargs):
         """Override __init__ to set default model_id."""
         super().__init__(keys, model_id, *args, **kwargs)
 

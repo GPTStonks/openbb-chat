@@ -89,17 +89,9 @@ classifiers = [
 dependencies = [
   "openbb==3.2.2",
   "torch==2.*",
-  "torchvision==0.*",
-  "lightning>=2.0.0",
-  "torchmetrics>=0.11.4",
-  "hydra-core==1.*",
-  "hydra-colorlog==1.*",
-  "hydra-optuna-sweeper==1.*",
-  "wandb>=0.15.5",
   "pyrootutils>=1.0.4",
   "pre-commit>=3.3.3",
   "rich>=12.6.0,<13.0.0",
-  "pytest>=7.4.0",
   "transformers>=4.33.0",
   "peft>=0.5.0",
   "einops>=0.6.1",
@@ -109,6 +101,19 @@ dependencies = [
   "guidance>=0.0.64",
   "auto-gptq>=0.4.2",
   "optimum>=1.12.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "lightning>=2.0.0",
+  "torchmetrics>=0.11.4",
+  "hydra-core==1.*",
+  "hydra-colorlog==1.*",
+  "hydra-optuna-sweeper==1.*",
+  "wandb>=0.15.5",
+]
+tests = [
+  "pytest>=7.4.0",
 ]
 
 [project.urls]

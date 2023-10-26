@@ -1,26 +1,24 @@
 from typing import List, Optional
 
-import guidance
-import torch
 from llama_index import (
     ServiceContext,
     SimpleDirectoryReader,
     StorageContext,
     VectorStoreIndex,
     get_response_synthesizer,
-    set_global_handler,
-    set_global_service_context,
+    load_index_from_storage,
 )
-from llama_index.indices.postprocessor import SimilarityPostprocessor
 from llama_index.indices.query.schema import QueryType
 from llama_index.llms import HuggingFaceLLM, OpenAI
 from llama_index.llms.base import LLM
 from llama_index.prompts import PromptTemplate
 from llama_index.query_engine import RetrieverQueryEngine
 from llama_index.response.schema import RESPONSE_TYPE
-from llama_index.retrievers import BM25Retriever, VectorIndexRetriever
+from llama_index.retrievers import VectorIndexRetriever
 from llama_index.schema import NodeWithScore
-from transformers import AutoTokenizer, BitsAndBytesConfig
+from llama_index.storage.docstore import SimpleDocumentStore
+from llama_index.storage.index_store import SimpleIndexStore
+from llama_index.vector_stores import SimpleVectorStore
 
 
 class AutoLlamaIndex:
@@ -28,8 +26,10 @@ class AutoLlamaIndex:
     chat`.
 
     Args:
-        path_to_sdk_docs (`str`):
-            Path to SDK documentation. The folder is processed recursively.
+        path (`str`):
+            There are two possibilities, depending of the starting sequence:
+            1. `files:` (default): path to files to compute embeddings. The folder is processed recursively.
+            2. `vsi:`: path to a persisted vector store index.
         embedding_model_id (`str`):
             Name of the Embedding model to use following `llama-index` convention.
         llm_model (`str | llama_index.llms.base.LLM`):
@@ -72,7 +72,7 @@ class AutoLlamaIndex:
 
     def __init__(
         self,
-        path_to_sdk_docs: str,
+        path: str,
         embedding_model_id: str,
         llm_model: str | LLM,
         context_window: int = 1024,
@@ -93,10 +93,7 @@ class AutoLlamaIndex:
     ):
         """Init method."""
 
-        docs_sdk = SimpleDirectoryReader(
-            path_to_sdk_docs, recursive=True, **other_llama_index_simple_directory_reader_kwargs
-        ).load_data()
-
+        # create LLM from configuration
         llm = self._create_llama_index_llm(
             llm_model=llm_model,
             context_window=context_window,
@@ -107,34 +104,24 @@ class AutoLlamaIndex:
             other_llama_index_llm_kwargs=other_llama_index_llm_kwargs,
         )
 
-        # service context to customize the models used by LlamaIndex
-        self._service_context = ServiceContext.from_defaults(
-            embed_model=embedding_model_id, llm=llm, **other_llama_index_service_context_kwargs
-        )
-        set_global_service_context(self._service_context)
-        nodes_sdk = self._service_context.node_parser.get_nodes_from_documents(docs_sdk)
-
-        # initialize storage context (by default it's in-memory)
-        self._storage_context = StorageContext.from_defaults(
-            **other_llama_index_storage_context_kwargs
-        )
-        self._storage_context.docstore.add_documents(nodes_sdk)
-
-        # create vector store index
-        self.index = VectorStoreIndex(
-            nodes_sdk,
-            service_context=self._service_context,
-            storage_context=self._storage_context,
-            **other_llama_index_vector_store_index_kwargs,
+        # create index
+        self._set_index_from_path(
+            path=path,
+            embedding_model_id=embedding_model_id,
+            llm=llm,
+            other_llama_index_simple_directory_reader_kwargs=other_llama_index_simple_directory_reader_kwargs,
+            other_llama_index_service_context_kwargs=other_llama_index_service_context_kwargs,
+            other_llama_index_storage_context_kwargs=other_llama_index_storage_context_kwargs,
+            other_llama_index_vector_store_index_kwargs=other_llama_index_vector_store_index_kwargs,
         )
 
         # configure retriever
-        self.retriever = VectorIndexRetriever(
-            index=self.index, **other_llama_index_vector_index_retriever_kwargs
+        self._retriever = VectorIndexRetriever(
+            index=self._index, **other_llama_index_vector_index_retriever_kwargs
         )
 
         # configure response synthesizer
-        self.response_synthesizer = get_response_synthesizer(
+        self._response_synthesizer = get_response_synthesizer(
             text_qa_template=PromptTemplate(qa_template_str)
             if qa_template_str is not None
             else None,
@@ -146,11 +133,71 @@ class AutoLlamaIndex:
         )
 
         # assemble query engine
-        self.query_engine = RetrieverQueryEngine(
-            retriever=self.retriever,
-            response_synthesizer=self.response_synthesizer,
+        self._query_engine = RetrieverQueryEngine(
+            retriever=self._retriever,
+            response_synthesizer=self._response_synthesizer,
             **other_llama_index_retriever_query_engine_kwargs,
         )
+
+    def _set_index_from_path(
+        self,
+        path: str,
+        embedding_model_id: str,
+        llm: LLM,
+        other_llama_index_simple_directory_reader_kwargs: dict = {},
+        other_llama_index_service_context_kwargs: dict = {},
+        other_llama_index_storage_context_kwargs: dict = {},
+        other_llama_index_vector_store_index_kwargs: dict = {},
+    ):
+        try:
+            path_type, path_str = path.split(":")
+        except Exception as e:
+            # : is not present in the string, assuming `files` as default
+            path_type = "files"
+            path_str = path
+
+        if path_type == "files":
+            # index loaded from files in a folder
+            docs_sdk = SimpleDirectoryReader(
+                path_str, recursive=True, **other_llama_index_simple_directory_reader_kwargs
+            ).load_data()
+
+            # service context to customize the models used by LlamaIndex
+            self._service_context = ServiceContext.from_defaults(
+                embed_model=embedding_model_id, llm=llm, **other_llama_index_service_context_kwargs
+            )
+            nodes_sdk = self._service_context.node_parser.get_nodes_from_documents(docs_sdk)
+
+            # initialize storage context (by default it's in-memory)
+            self._storage_context = StorageContext.from_defaults(
+                **other_llama_index_storage_context_kwargs
+            )
+            self._storage_context.docstore.add_documents(nodes_sdk)
+
+            # create vector store index
+            self._index = VectorStoreIndex(
+                nodes_sdk,
+                service_context=self._service_context,
+                storage_context=self._storage_context,
+                **other_llama_index_vector_store_index_kwargs,
+            )
+        elif path_type == "vsi":
+            # index loaded from a persisted index
+            self._storage_context = StorageContext.from_defaults(
+                docstore=SimpleDocumentStore.from_persist_dir(persist_dir=path_str),
+                vector_store=SimpleVectorStore.from_persist_dir(persist_dir=path_str),
+                index_store=SimpleIndexStore.from_persist_dir(persist_dir=path_str),
+            )
+            self._service_context = ServiceContext.from_defaults(
+                embed_model=embedding_model_id, llm=llm, **other_llama_index_service_context_kwargs
+            )
+            self._index = load_index_from_storage(
+                storage_context=self._storage_context, service_context=self._service_context
+            )
+        else:
+            raise ValueError(
+                f"`path` type {path_type} undefined. Check documentation for valid values."
+            )
 
     def _create_llama_index_llm(
         self,
@@ -198,7 +245,7 @@ class AutoLlamaIndex:
             `llama_index.response.schema.RESPONSE_TYPE`: response from the LLM.
         """
 
-        return self.query_engine.query(str_or_query_bundle)
+        return self._query_engine.query(str_or_query_bundle)
 
     def retrieve(self, str_or_query_bundle: QueryType) -> List[NodeWithScore]:
         """Obtains the closest nodes to the query, computing the similarity of the query embedding
@@ -212,4 +259,4 @@ class AutoLlamaIndex:
             `List[llama_index.schema.NodeWithScore]`: list with most similar nodes and their similarity score.
         """
 
-        return self.retriever.retrieve(str_or_query_bundle)
+        return self._retriever.retrieve(str_or_query_bundle)

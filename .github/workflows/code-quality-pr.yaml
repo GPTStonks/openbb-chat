@@ -21,6 +21,10 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v3
 
+      - name: Install pkg_resources
+        run: python -m pip install setuptools
+        shell: bash
+
       - name: Find modified files
         id: file_changes
         uses: trilom/file-changes-action@v1.2.4
@@ -32,5 +36,5 @@ jobs:
 
       - name: Run pre-commits
         uses: pre-commit/action@v3.0.0
-        with:
-          extra_args: --files ${{ steps.file_changes.outputs.files}}
+        # with:
+        #   extra_args: --files ${{ steps.file_changes.outputs.files}}

@@ -20,7 +20,7 @@ from llama_index.storage.docstore import SimpleDocumentStore
 from llama_index.storage.index_store import SimpleIndexStore
 from llama_index.vector_stores import SimpleVectorStore
 
-from openbb_chat.retrievers.vector_bm25_retriever import HybridORRetriever
+from openbb_chat.retrievers.hybrid_or_retriever import HybridORRetriever
 
 
 class AutoLlamaIndex:

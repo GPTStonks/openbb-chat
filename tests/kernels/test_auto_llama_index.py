@@ -86,3 +86,42 @@ def test_auto_llama_index_persistance(mocked_query, mocked_retrieve):
     # test query
     response = autollamaindex.query(query)
     mocked_query.assert_called_once()
+
+
+@patch.object(VectorIndexRetriever, "retrieve")
+@patch.object(RetrieverQueryEngine, "query")
+def test_auto_llama_index_query_with_model(mocked_query, mocked_retrieve):
+    # load testing models
+    autollamaindex = AutoLlamaIndex(
+        "./docs",
+        "local:sentence-transformers/all-MiniLM-L6-v2",
+        "hf:sshleifer/tiny-gpt2",
+        context_window=100,
+        other_llama_index_response_synthesizer_kwargs={"response_mode": "simple_summarize"},
+    )
+
+    query = "What is the purpose of Index.md"
+
+    # test query
+    response = autollamaindex.query_with_model(query, "hf:sshleifer/tiny-gpt2")
+    mocked_query.assert_called_once()
+
+
+@patch.object(VectorIndexRetriever, "retrieve")
+@patch.object(RetrieverQueryEngine, "synthesize")
+def test_auto_llama_index_synth(mocked_synthesize, mocked_retrieve):
+    # load testing models
+    autollamaindex = AutoLlamaIndex(
+        "./docs",
+        "local:sentence-transformers/all-MiniLM-L6-v2",
+        "hf:sshleifer/tiny-gpt2",
+        context_window=100,
+        other_llama_index_response_synthesizer_kwargs={"response_mode": "simple_summarize"},
+    )
+
+    query = "What is the purpose of Index.md"
+
+    # test query
+    node_list = autollamaindex.retrieve(query)
+    response = autollamaindex.synth(query, node_list)
+    mocked_synthesize.assert_called_once()

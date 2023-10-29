@@ -8,17 +8,19 @@ from llama_index import (
     get_response_synthesizer,
     load_index_from_storage,
 )
-from llama_index.indices.query.schema import QueryType
+from llama_index.indices.query.schema import QueryBundle, QueryType
 from llama_index.llms import HuggingFaceLLM, OpenAI
 from llama_index.llms.base import LLM
 from llama_index.prompts import PromptTemplate
 from llama_index.query_engine import RetrieverQueryEngine
 from llama_index.response.schema import RESPONSE_TYPE
-from llama_index.retrievers import VectorIndexRetriever
+from llama_index.retrievers import BM25Retriever, VectorIndexRetriever
 from llama_index.schema import NodeWithScore
 from llama_index.storage.docstore import SimpleDocumentStore
 from llama_index.storage.index_store import SimpleIndexStore
 from llama_index.vector_stores import SimpleVectorStore
+
+from openbb_chat.retrievers.vector_bm25_retriever import HybridORRetriever
 
 
 class AutoLlamaIndex:
@@ -28,8 +30,8 @@ class AutoLlamaIndex:
     Args:
         path (`str`):
             There are two possibilities, depending of the starting sequence:
-            1. `files:` (default): path to files to compute embeddings. The folder is processed recursively.
-            2. `vsi:`: path to a persisted vector store index.
+            1. `files:{path_str}` (default): path to files to compute embeddings. The folder is processed recursively.
+            2. `vsi:{path_str}`: path to a persisted vector store index.
         embedding_model_id (`str`):
             Name of the Embedding model to use following `llama-index` convention.
         llm_model (`str | llama_index.llms.base.LLM`):
@@ -82,12 +84,14 @@ class AutoLlamaIndex:
         model_kwargs: Optional[dict] = None,
         qa_template_str: Optional[str] = None,
         refine_template_str: Optional[str] = None,
+        use_hybrid_retriever: bool = True,
         other_llama_index_llm_kwargs: dict = {},
         other_llama_index_simple_directory_reader_kwargs: dict = {},
         other_llama_index_service_context_kwargs: dict = {},
         other_llama_index_storage_context_kwargs: dict = {},
         other_llama_index_vector_store_index_kwargs: dict = {},
         other_llama_index_vector_index_retriever_kwargs: dict = {},
+        other_llama_index_bm25_retriever_kwargs: dict = {},
         other_llama_index_response_synthesizer_kwargs: dict = {},
         other_llama_index_retriever_query_engine_kwargs: dict = {},
     ):
@@ -116,18 +120,30 @@ class AutoLlamaIndex:
         )
 
         # configure retriever
-        self._retriever = VectorIndexRetriever(
-            index=self._index, **other_llama_index_vector_index_retriever_kwargs
+        if use_hybrid_retriever:
+            vector_retriever = VectorIndexRetriever(
+                index=self._index, **other_llama_index_vector_index_retriever_kwargs
+            )
+            bm25_retriever = BM25Retriever.from_defaults(
+                index=self._index, **other_llama_index_bm25_retriever_kwargs
+            )
+            self._retriever = HybridORRetriever(vector_retriever, bm25_retriever)
+        else:
+            self._retriever = VectorIndexRetriever(
+                index=self._index, **other_llama_index_vector_index_retriever_kwargs
+            )
+
+        self._qa_template_str = (
+            PromptTemplate(qa_template_str) if qa_template_str is not None else None
+        )
+        self._refine_template_str = (
+            PromptTemplate(refine_template_str) if refine_template_str is not None else None
         )
 
         # configure response synthesizer
         self._response_synthesizer = get_response_synthesizer(
-            text_qa_template=PromptTemplate(qa_template_str)
-            if qa_template_str is not None
-            else None,
-            refine_template=PromptTemplate(refine_template_str)
-            if refine_template_str is not None
-            else None,
+            text_qa_template=self._qa_template_str,
+            refine_template=self._refine_template_str,
             service_context=self._service_context,
             **other_llama_index_response_synthesizer_kwargs,
         )
@@ -138,6 +154,10 @@ class AutoLlamaIndex:
             response_synthesizer=self._response_synthesizer,
             **other_llama_index_retriever_query_engine_kwargs,
         )
+
+    @property
+    def index(self):
+        return self._index
 
     def _set_index_from_path(
         self,
@@ -152,7 +172,7 @@ class AutoLlamaIndex:
         try:
             path_type, path_str = path.split(":")
         except Exception as e:
-            # : is not present in the string, assuming `files` as default
+            # `:` is not present in the string, assuming `files` as default
             path_type = "files"
             path_str = path
 
@@ -260,3 +280,98 @@ class AutoLlamaIndex:
         """
 
         return self._retriever.retrieve(str_or_query_bundle)
+
+    def query_with_model(
+        self,
+        str_or_query_bundle: QueryType,
+        llm_model: str | LLM,
+        context_window: int = 1024,
+        generate_kwargs: Optional[dict] = None,
+        tokenizer_name: Optional[str] = None,
+        tokenizer_kwargs: Optional[dict] = None,
+        model_kwargs: Optional[dict] = None,
+        other_llama_index_llm_kwargs: dict = {},
+        other_llama_index_response_synthesizer_kwargs={},
+        other_llama_index_retriever_query_engine_kwargs={},
+    ) -> RESPONSE_TYPE:
+        """Calls query method on the RetrieverQueryEngine with the specified model. It is slower
+        than `self.query` because the service context, response synthesizer and query engine need
+        to be rebuilt.
+
+        Args:
+            str_or_query_bundle (`llama_index.indices.query.schema.QueryType`):
+                String or query bundle with the query to run.
+            llm_model (`str | llama_index.llms.base.LLM`):
+                It can be specified in two possible ways:
+                - Name of the LLM to use. For now, only OpenAI and Hugging Face models are supported.
+                    The model should be in the format `openai:{model_name}` or `hf:{model_name}`.
+                - Instance of a `llama-index` compatible LLM, for models other than OpenAI and Hugging Face.
+            context_window (`int`):
+                Context window to use with Hugging Face models.
+            generate_kwargs (`Optional[dict]`):
+                For Hugging Face models. These kwargs are passed directly to `AutoModelForCausalLM.generate` method.
+            tokenizer_name (`Optional[str]`):
+                For Hugging Face models. By default set to the llm_model id.
+            tokenizer_kwargs (`Optional[dict]`):
+                For Hugging Face models. These kwargs are passed directly to `AutoTokenizer`.
+            model_kwargs (`Optional[dict]`):
+                For Hugging Face models. These kwargs are passed directly to `AutoModelForCausalLM.from_pretrained`, apart from
+                `device_map` which should be specified in `other_llama_index_llm_kwargs`.
+            other_llama_index_llm_kwargs (`dict`):
+                Overrides the default values in LlamaIndex's `LLM`.
+            other_llama_index_response_synthesizer_kwargs (`dict`):
+                Overrides the default values in LlamaIndex's `get_response_synthesizer`.
+            other_llama_index_retriever_query_engine_kwargs (`dict`):
+                Overrides the default values in LlamaIndex's `RetrieverQueryEngine`.
+
+        Returns:
+            `llama_index.response.schema.RESPONSE_TYPE`: response from the LLM.
+        """
+
+        llm = self._create_llama_index_llm(
+            llm_model=llm_model,
+            context_window=context_window,
+            generate_kwargs=generate_kwargs,
+            tokenizer_name=tokenizer_name,
+            tokenizer_kwargs=tokenizer_kwargs,
+            model_kwargs=model_kwargs,
+            other_llama_index_llm_kwargs=other_llama_index_llm_kwargs,
+        )
+        aux_service_context = ServiceContext.from_service_context(
+            service_context=self._service_context, llm=llm
+        )
+
+        # configure response synthesizer
+        response_synthesizer = get_response_synthesizer(
+            text_qa_template=self._qa_template_str,
+            refine_template=self._refine_template_str,
+            service_context=aux_service_context,
+            **other_llama_index_response_synthesizer_kwargs,
+        )
+
+        # assemble query engine
+        query_engine = RetrieverQueryEngine(
+            retriever=self._retriever,
+            response_synthesizer=response_synthesizer,
+            **other_llama_index_retriever_query_engine_kwargs,
+        )
+
+        return query_engine.query(str_or_query_bundle)
+
+    def synth(self, str_or_query_bundle: QueryType, nodes: List[NodeWithScore]) -> RESPONSE_TYPE:
+        """Calls synth method on the RetrieverQueryEngine.
+
+        Args:
+            str_or_query_bundle (`llama_index.indices.query.schema.QueryType`):
+                String or query bundle with the query to run.
+
+        Returns:
+            `llama_index.response.schema.RESPONSE_TYPE`: response from the LLM.
+        """
+
+        return self._query_engine.synthesize(
+            QueryBundle(str_or_query_bundle)
+            if isinstance(str_or_query_bundle, str)
+            else str_or_query_bundle,
+            nodes,
+        )

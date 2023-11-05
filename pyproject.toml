@@ -26,7 +26,7 @@ exclude_lines = [
 
 [tool.poetry]
 name = "openbb-chat"
-version = "0.0.6"
+version = "0.0.7"
 description = "Chat interface for OpenBB"
 authors = ["GPTStonks <gptstonks@gmail.com>"]
 readme = "README.md"
@@ -76,7 +76,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "openbb-chat"
-version = "0.0.6"
+version = "0.0.7"
 description = "Deep learning package to add chat capabilities to OpenBB"
 authors = [
   { name="GPTStonks", email="gptstonks@gmail.com" }

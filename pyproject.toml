@@ -34,7 +34,7 @@ packages = [{include = "openbb_chat"}]
 
 [tool.poetry.dependencies]
 python = "3.10.*"
-openbb = { version = "3.2.2", python = "3.10.*" }
+openbb = { version = "3.2.3", python = "3.10.*" }
 torch = [
 	{ url = "https://download.pytorch.org/whl/cu117/torch-2.0.1%2Bcu117-cp311-cp311-linux_x86_64.whl", python = "3.11.*", markers = "sys_platform == 'linux'" },
 	{ url = "https://download.pytorch.org/whl/cu117/torch-2.0.1%2Bcu117-cp310-cp310-linux_x86_64.whl", python = "3.10.*", markers = "sys_platform == 'linux'" },
@@ -89,7 +89,7 @@ classifiers = [
   "Operating System :: OS Independent",
 ]
 dependencies = [
-  "openbb==3.2.2",
+  "openbb==3.2.3",
   "torch==2.*",
   "pyrootutils>=1.0.4",
   "pre-commit>=3.3.3",

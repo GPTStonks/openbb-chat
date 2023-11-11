@@ -204,9 +204,7 @@ class AutoLlamaIndex:
         elif path_type == "vsi":
             # index loaded from a persisted index
             self._storage_context = StorageContext.from_defaults(
-                docstore=SimpleDocumentStore.from_persist_dir(persist_dir=path_str),
-                vector_store=SimpleVectorStore.from_persist_dir(persist_dir=path_str),
-                index_store=SimpleIndexStore.from_persist_dir(persist_dir=path_str),
+                persist_dir=path_str,
             )
             self._service_context = ServiceContext.from_defaults(
                 embed_model=embedding_model_id, llm=llm, **other_llama_index_service_context_kwargs

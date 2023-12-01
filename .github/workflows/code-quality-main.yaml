@@ -18,5 +18,9 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v3
 
+      - name: Install pkg_resources
+        run: python -m pip install setuptools
+        shell: bash
+
       - name: Run pre-commits
         uses: pre-commit/action@v3.0.0

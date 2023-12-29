@@ -98,7 +98,7 @@ class AutoLlamaIndex:
         """Init method."""
 
         # create LLM from configuration
-        llm = self._create_llama_index_llm(
+        self._llm = self._create_llama_index_llm(
             llm_model=llm_model,
             context_window=context_window,
             generate_kwargs=generate_kwargs,
@@ -112,7 +112,7 @@ class AutoLlamaIndex:
         self._set_index_from_path(
             path=path,
             embedding_model_id=embedding_model_id,
-            llm=llm,
+            llm=self._llm,
             other_llama_index_simple_directory_reader_kwargs=other_llama_index_simple_directory_reader_kwargs,
             other_llama_index_service_context_kwargs=other_llama_index_service_context_kwargs,
             other_llama_index_storage_context_kwargs=other_llama_index_storage_context_kwargs,
@@ -158,6 +158,14 @@ class AutoLlamaIndex:
     @property
     def index(self):
         return self._index
+
+    @property
+    def query_engine(self):
+        return self._query_engine
+
+    @property
+    def llm(self):
+        return self._llm
 
     def _set_index_from_path(
         self,
@@ -265,6 +273,19 @@ class AutoLlamaIndex:
 
         return self._query_engine.query(str_or_query_bundle)
 
+    async def aquery(self, str_or_query_bundle: QueryType) -> RESPONSE_TYPE:
+        """Calls aquery method on the RetrieverQueryEngine.
+
+        Args:
+            str_or_query_bundle (`llama_index.indices.query.schema.QueryType`):
+                String or query bundle with the query to run.
+
+        Returns:
+            `llama_index.response.schema.RESPONSE_TYPE`: response from the LLM.
+        """
+
+        return await self._query_engine.aquery(str_or_query_bundle)
+
     def retrieve(self, str_or_query_bundle: QueryType) -> List[NodeWithScore]:
         """Obtains the closest nodes to the query, computing the similarity of the query embedding
         and the index embeddings.
@@ -278,6 +299,20 @@ class AutoLlamaIndex:
         """
 
         return self._retriever.retrieve(str_or_query_bundle)
+
+    async def aretrieve(self, str_or_query_bundle: QueryType) -> List[NodeWithScore]:
+        """Obtains the closest nodes to the query, computing the similarity of the query embedding
+        and the index embeddings. Async interface.
+
+        Args:
+            str_or_query_bundle (`llama_index.indices.query.schema.QueryType`):
+                String or query bundle to get most similar stored nodes.
+
+        Returns:
+            `List[llama_index.schema.NodeWithScore]`: list with most similar nodes and their similarity score.
+        """
+
+        return await self._retriever.aretrieve(str_or_query_bundle)
 
     def query_with_model(
         self,
@@ -368,6 +403,26 @@ class AutoLlamaIndex:
         """
 
         return self._query_engine.synthesize(
+            QueryBundle(str_or_query_bundle)
+            if isinstance(str_or_query_bundle, str)
+            else str_or_query_bundle,
+            nodes,
+        )
+
+    async def asynth(
+        self, str_or_query_bundle: QueryType, nodes: List[NodeWithScore]
+    ) -> RESPONSE_TYPE:
+        """Calls asynth method on the RetrieverQueryEngine.
+
+        Args:
+            str_or_query_bundle (`llama_index.indices.query.schema.QueryType`):
+                String or query bundle with the query to run.
+
+        Returns:
+            `llama_index.response.schema.RESPONSE_TYPE`: response from the LLM.
+        """
+
+        return await self._query_engine.asynthesize(
             QueryBundle(str_or_query_bundle)
             if isinstance(str_or_query_bundle, str)
             else str_or_query_bundle,

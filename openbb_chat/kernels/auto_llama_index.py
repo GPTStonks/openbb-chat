@@ -9,8 +9,7 @@ from llama_index import (
     load_index_from_storage,
 )
 from llama_index.indices.query.schema import QueryBundle, QueryType
-from llama_index.llms import HuggingFaceLLM, OpenAI
-from llama_index.llms.base import LLM
+from llama_index.llms import LLM, HuggingFaceLLM, OpenAI
 from llama_index.prompts import PromptTemplate
 from llama_index.query_engine import RetrieverQueryEngine
 from llama_index.response.schema import RESPONSE_TYPE

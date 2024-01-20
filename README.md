@@ -2,10 +2,22 @@
 
 # OpenBB Chat
 
-<a href="https://pytorch.org/get-started/locally/"><img alt="PyTorch" src="https://img.shields.io/badge/PyTorch-ee4c2c?logo=pytorch&logoColor=white"></a>
-<a href="https://pytorchlightning.ai/"><img alt="Lightning" src="https://img.shields.io/badge/-Lightning-792ee5?logo=pytorchlightning&logoColor=white"></a>
-<a href="https://hydra.cc/"><img alt="Config: Hydra" src="https://img.shields.io/badge/Config-Hydra-89b8cd"></a>
-<a href="https://huggingface.co/"><img alt="Models: HuggingFace" src="https://img.shields.io/badge/Models-HuggingFace-ffd21e"></a>
+<p align="center">
+  <!-- X Badge -->
+  <a href="https://twitter.com/GPTStonks"><img src="https://img.shields.io/badge/follow_us-000000?logo=x&logoColor=white" alt="X Follow Us Badge"></a>
+  <!-- Discord Badge -->
+  <a href="https://discord.gg/MyDDGuEd"><img src="https://img.shields.io/badge/Discord-5865F2?logo=discord&logoColor=white" alt="Discord Badge"></a>
+  <!-- Docker Badge -->
+  <a href="https://hub.docker.com/u/gptstonks">
+    <img src="https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white" alt="Docker Badge">
+  </a>
+</p>
+<p align="center">
+    <a href="https://pytorch.org/get-started/locally/"><img alt="PyTorch" src="https://img.shields.io/badge/PyTorch-ee4c2c?logo=pytorch&logoColor=white"></a>
+    <a href="https://pytorchlightning.ai/"><img alt="Lightning" src="https://img.shields.io/badge/-Lightning-792ee5?logo=pytorchlightning&logoColor=white"></a>
+    <a href="https://hydra.cc/"><img alt="Config: Hydra" src="https://img.shields.io/badge/Config-Hydra-89b8cd"></a>
+    <a href="https://huggingface.co/"><img alt="Models: HuggingFace" src="https://img.shields.io/badge/Models-HuggingFace-ffd21e"></a>
+</p>
 
 </div>
 

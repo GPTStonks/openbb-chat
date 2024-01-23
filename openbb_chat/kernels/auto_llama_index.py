@@ -18,11 +18,12 @@ from llama_index.schema import NodeWithScore
 from llama_index.storage.docstore import SimpleDocumentStore
 from llama_index.storage.index_store import SimpleIndexStore
 from llama_index.vector_stores import SimpleVectorStore
+from pydantic import BaseModel
 
 from openbb_chat.retrievers.hybrid_or_retriever import HybridORRetriever
 
 
-class AutoLlamaIndex:
+class AutoLlamaIndex(BaseModel):
     """Wrapper around `llama-index` that fixes its possibilities to the ones needed for `openbb-
     chat`.
 
@@ -53,6 +54,8 @@ class AutoLlamaIndex:
             String representation of the LlamaIndex's QA template to use.
         refine_template_str (`Optional[str]`):
             String representation of the LlamaIndex's refine template to use.
+        retriever_type (`str`):
+            One of 'hybrid', 'vector' or 'bm25'. Default 'hybrid'.
         other_llama_index_llm_kwargs (`dict`):
             Overrides the default values in LlamaIndex's `LLM`
         other_llama_index_simple_directory_reader_kwargs (`dict`):
@@ -83,7 +86,7 @@ class AutoLlamaIndex:
         model_kwargs: Optional[dict] = None,
         qa_template_str: Optional[str] = None,
         refine_template_str: Optional[str] = None,
-        use_hybrid_retriever: bool = True,
+        retriever_type: str = "hybrid",
         other_llama_index_llm_kwargs: dict = {},
         other_llama_index_simple_directory_reader_kwargs: dict = {},
         other_llama_index_service_context_kwargs: dict = {},
@@ -95,6 +98,7 @@ class AutoLlamaIndex:
         other_llama_index_retriever_query_engine_kwargs: dict = {},
     ):
         """Init method."""
+        super().__init__()
 
         # create LLM from configuration
         self._llm = self._create_llama_index_llm(
@@ -119,7 +123,7 @@ class AutoLlamaIndex:
         )
 
         # configure retriever
-        if use_hybrid_retriever:
+        if retriever_type == "hybrid":
             vector_retriever = VectorIndexRetriever(
                 index=self._index, **other_llama_index_vector_index_retriever_kwargs
             )
@@ -127,9 +131,17 @@ class AutoLlamaIndex:
                 index=self._index, **other_llama_index_bm25_retriever_kwargs
             )
             self._retriever = HybridORRetriever(vector_retriever, bm25_retriever)
-        else:
+        elif retriever_type == "vector":
             self._retriever = VectorIndexRetriever(
                 index=self._index, **other_llama_index_vector_index_retriever_kwargs
+            )
+        elif retriever_type == "bm25":
+            self._retriever = BM25Retriever.from_defaults(
+                index=self._index, **other_llama_index_bm25_retriever_kwargs
+            )
+        else:
+            raise ValueError(
+                f"`retriever_type` must be 'hybrid', 'vector' or 'bm25'. Current value: {retriever_type}"
             )
 
         self._qa_template_str = (

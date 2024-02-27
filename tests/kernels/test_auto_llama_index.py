@@ -1,15 +1,16 @@
 from unittest.mock import patch
 
 import pytest
-from llama_index import (
+from llama_index.core import (
     ServiceContext,
     SimpleDirectoryReader,
     StorageContext,
     VectorStoreIndex,
 )
-from llama_index.llms import HuggingFaceLLM
-from llama_index.query_engine import RetrieverQueryEngine
-from llama_index.retrievers import BM25Retriever, VectorIndexRetriever
+from llama_index.core.query_engine import RetrieverQueryEngine
+from llama_index.core.retrievers import VectorIndexRetriever
+from llama_index.llms.huggingface import HuggingFaceLLM
+from llama_index.retrievers.bm25 import BM25Retriever
 
 from openbb_chat.kernels.auto_llama_index import AutoLlamaIndex
 

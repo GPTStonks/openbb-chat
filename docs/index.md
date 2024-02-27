@@ -11,7 +11,7 @@ OpenBB Chat provides chat capabilities to [OpenBB](https://github.com/OpenBB-fin
 
 ## Installation
 
-#### Poetry
+#### PDM
 
 ```bash
 # clone project
@@ -22,19 +22,10 @@ cd openbb-chat
 conda create -n myenv python=3.10
 conda activate myenv
 
-# install poetry (change paths as needed)
-POETRY_VERSION=1.5.1
-POETRY_HOME=/opt/poetry
-POETRY_VENV=/opt/poetry-venv
-POETRY_CACHE_DIR=/opt/.cache
-python3 -m venv $POETRY_VENV \
-&& $POETRY_VENV/bin/pip install -U pip setuptools \
-&& $POETRY_VENV/bin/pip install poetry==${POETRY_VERSION}
+# install pdm (change paths as needed)
+pip install pdm
 
-# add poetry to PATH
-PATH="${PATH}:${POETRY_VENV}/bin"
-
-poetry install
+pdm install
 ```
 
 ## How to run
@@ -43,22 +34,22 @@ Train model with default configuration
 
 ```bash
 # train demo on CPU
-poetry run python openbb_chat/train.py trainer=cpu
+python openbb_chat/train.py trainer=cpu
 
 # train demo on GPU
-poetry run python openbb_chat/train.py trainer=gpu
+python openbb_chat/train.py trainer=gpu
 ```
 
 Train model with chosen experiment configuration from [configs/experiment/](configs/experiment/)
 
 ```bash
-poetry run python openbb_chat/train.py experiment=experiment_name.yaml
+python openbb_chat/train.py experiment=experiment_name.yaml
 ```
 
 You can override any parameter from command line like this
 
 ```bash
-poetry run python openbb_chat/train.py trainer.max_epochs=20 data.batch_size=64
+python openbb_chat/train.py trainer.max_epochs=20 data.batch_size=64
 ```
 
 ## Released models

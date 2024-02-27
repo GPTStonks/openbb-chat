@@ -22,7 +22,7 @@ class GuidanceWrapper:
         tokenizer = AutoTokenizer.from_pretrained(model_id, **tokenizer_kwargs)
 
         # set the default language model used to execute guidance programs
-        guidance.llm = guidance.llms.Transformers(
+        guidance.llm = guidance.models.Transformers(
             model=model_id, tokenizer=tokenizer, **model_kwargs
         )
 

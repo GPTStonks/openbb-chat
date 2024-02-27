@@ -1,23 +1,27 @@
 from typing import List, Optional
 
-from llama_index import (
-    ServiceContext,
+from llama_index.core import (
+    PromptTemplate,
+    QueryBundle,
+    Settings,
     SimpleDirectoryReader,
     StorageContext,
     VectorStoreIndex,
     get_response_synthesizer,
     load_index_from_storage,
 )
-from llama_index.indices.query.schema import QueryBundle, QueryType
-from llama_index.llms import LLM, HuggingFaceLLM, OpenAI
-from llama_index.prompts import PromptTemplate
-from llama_index.query_engine import RetrieverQueryEngine
-from llama_index.response.schema import RESPONSE_TYPE
-from llama_index.retrievers import BM25Retriever, VectorIndexRetriever
-from llama_index.schema import NodeWithScore
-from llama_index.storage.docstore import SimpleDocumentStore
-from llama_index.storage.index_store import SimpleIndexStore
-from llama_index.vector_stores import SimpleVectorStore
+from llama_index.core.base.response.schema import RESPONSE_TYPE
+from llama_index.core.indices.query.schema import QueryType
+from llama_index.core.llms import LLM
+from llama_index.core.query_engine import RetrieverQueryEngine
+from llama_index.core.retrievers import VectorIndexRetriever
+from llama_index.core.schema import NodeWithScore
+from llama_index.core.storage.docstore import SimpleDocumentStore
+from llama_index.core.storage.index_store import SimpleIndexStore
+from llama_index.core.vector_stores import SimpleVectorStore
+from llama_index.llms.huggingface import HuggingFaceLLM
+from llama_index.llms.openai import OpenAI
+from llama_index.retrievers.bm25 import BM25Retriever
 from pydantic import BaseModel
 
 from openbb_chat.retrievers.hybrid_or_retriever import HybridORRetriever
@@ -60,8 +64,6 @@ class AutoLlamaIndex(BaseModel):
             Overrides the default values in LlamaIndex's `LLM`
         other_llama_index_simple_directory_reader_kwargs (`dict`):
             Overrides the default values in LlamaIndex's `SimpleDirectoryReader`.
-        other_llama_index_service_context_kwargs (`dict`):
-            Overrides the default values in LlamaIndex's `ServiceContext.from_defaults`.
         other_llama_index_storage_context_kwargs (`dict`):
             Overrides the default values in LlamaIndex's `StorageContext.from_defaults`.
         other_llama_index_vector_store_index_kwargs (`dict`):
@@ -78,7 +80,7 @@ class AutoLlamaIndex(BaseModel):
         self,
         path: str,
         embedding_model_id: str,
-        llm_model: str | LLM,
+        llm_model: str | LLM | None = None,
         context_window: int = 1024,
         tokenizer_name: Optional[str] = None,
         generate_kwargs: Optional[dict] = None,
@@ -89,7 +91,6 @@ class AutoLlamaIndex(BaseModel):
         retriever_type: str = "hybrid",
         other_llama_index_llm_kwargs: dict = {},
         other_llama_index_simple_directory_reader_kwargs: dict = {},
-        other_llama_index_service_context_kwargs: dict = {},
         other_llama_index_storage_context_kwargs: dict = {},
         other_llama_index_vector_store_index_kwargs: dict = {},
         other_llama_index_vector_index_retriever_kwargs: dict = {},
@@ -101,23 +102,27 @@ class AutoLlamaIndex(BaseModel):
         super().__init__()
 
         # create LLM from configuration
-        self._llm = self._create_llama_index_llm(
-            llm_model=llm_model,
-            context_window=context_window,
-            generate_kwargs=generate_kwargs,
-            tokenizer_name=tokenizer_name,
-            tokenizer_kwargs=tokenizer_kwargs,
-            model_kwargs=model_kwargs,
-            other_llama_index_llm_kwargs=other_llama_index_llm_kwargs,
-        )
+        if llm_model:
+            self._llm = self._create_llama_index_llm(
+                llm_model=llm_model,
+                context_window=context_window,
+                generate_kwargs=generate_kwargs,
+                tokenizer_name=tokenizer_name,
+                tokenizer_kwargs=tokenizer_kwargs,
+                model_kwargs=model_kwargs,
+                other_llama_index_llm_kwargs=other_llama_index_llm_kwargs,
+            )
+            Settings.llm = self._llm
+        else:
+            self._llm = None
+
+        # global default
+        Settings.embed_model = embedding_model_id
 
         # create index
         self._set_index_from_path(
             path=path,
-            embedding_model_id=embedding_model_id,
-            llm=self._llm,
             other_llama_index_simple_directory_reader_kwargs=other_llama_index_simple_directory_reader_kwargs,
-            other_llama_index_service_context_kwargs=other_llama_index_service_context_kwargs,
             other_llama_index_storage_context_kwargs=other_llama_index_storage_context_kwargs,
             other_llama_index_vector_store_index_kwargs=other_llama_index_vector_store_index_kwargs,
         )
@@ -155,7 +160,6 @@ class AutoLlamaIndex(BaseModel):
         self._response_synthesizer = get_response_synthesizer(
             text_qa_template=self._qa_template_str,
             refine_template=self._refine_template_str,
-            service_context=self._service_context,
             **other_llama_index_response_synthesizer_kwargs,
         )
 
@@ -167,24 +171,21 @@ class AutoLlamaIndex(BaseModel):
         )
 
     @property
-    def index(self):
+    def index(self) -> VectorStoreIndex:
         return self._index
 
     @property
-    def query_engine(self):
+    def query_engine(self) -> RetrieverQueryEngine:
         return self._query_engine
 
     @property
-    def llm(self):
+    def llm(self) -> LLM | None:
         return self._llm
 
     def _set_index_from_path(
         self,
         path: str,
-        embedding_model_id: str,
-        llm: LLM,
         other_llama_index_simple_directory_reader_kwargs: dict = {},
-        other_llama_index_service_context_kwargs: dict = {},
         other_llama_index_storage_context_kwargs: dict = {},
         other_llama_index_vector_store_index_kwargs: dict = {},
     ):
@@ -201,22 +202,14 @@ class AutoLlamaIndex(BaseModel):
                 path_str, recursive=True, **other_llama_index_simple_directory_reader_kwargs
             ).load_data()
 
-            # service context to customize the models used by LlamaIndex
-            self._service_context = ServiceContext.from_defaults(
-                embed_model=embedding_model_id, llm=llm, **other_llama_index_service_context_kwargs
-            )
-            nodes_sdk = self._service_context.node_parser.get_nodes_from_documents(docs_sdk)
-
-            # initialize storage context (by default it's in-memory)
+            # storage context to customize
             self._storage_context = StorageContext.from_defaults(
                 **other_llama_index_storage_context_kwargs
             )
-            self._storage_context.docstore.add_documents(nodes_sdk)
 
             # create vector store index
-            self._index = VectorStoreIndex(
-                nodes_sdk,
-                service_context=self._service_context,
+            self._index = VectorStoreIndex.from_documents(
+                docs_sdk,
                 storage_context=self._storage_context,
                 **other_llama_index_vector_store_index_kwargs,
             )
@@ -225,12 +218,7 @@ class AutoLlamaIndex(BaseModel):
             self._storage_context = StorageContext.from_defaults(
                 persist_dir=path_str,
             )
-            self._service_context = ServiceContext.from_defaults(
-                embed_model=embedding_model_id, llm=llm, **other_llama_index_service_context_kwargs
-            )
-            self._index = load_index_from_storage(
-                storage_context=self._storage_context, service_context=self._service_context
-            )
+            self._index = load_index_from_storage(storage_context=self._storage_context)
         else:
             raise ValueError(
                 f"`path` type {path_type} undefined. Check documentation for valid values."
@@ -339,8 +327,8 @@ class AutoLlamaIndex(BaseModel):
         other_llama_index_retriever_query_engine_kwargs={},
     ) -> RESPONSE_TYPE:
         """Calls query method on the RetrieverQueryEngine with the specified model. It is slower
-        than `self.query` because the service context, response synthesizer and query engine need
-        to be rebuilt.
+        than `self.query` because the LLM, response synthesizer and query engine need to be
+        rebuilt.
 
         Args:
             str_or_query_bundle (`llama_index.indices.query.schema.QueryType`):
@@ -381,15 +369,12 @@ class AutoLlamaIndex(BaseModel):
             model_kwargs=model_kwargs,
             other_llama_index_llm_kwargs=other_llama_index_llm_kwargs,
         )
-        aux_service_context = ServiceContext.from_service_context(
-            service_context=self._service_context, llm=llm
-        )
 
         # configure response synthesizer
         response_synthesizer = get_response_synthesizer(
             text_qa_template=self._qa_template_str,
             refine_template=self._refine_template_str,
-            service_context=aux_service_context,
+            llm=llm,
             **other_llama_index_response_synthesizer_kwargs,
         )
 

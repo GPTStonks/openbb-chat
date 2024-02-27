@@ -5,7 +5,7 @@ import pytest
 from openbb_chat.llms.guidance_wrapper import GuidanceWrapper
 
 
-@patch("guidance.llms.Transformers")
+@patch("guidance.models.Transformers")
 @patch("guidance.__call__")
 def test_guidance_wrapper(mocked_transformers, mocked_call):
     guidance_wrapper = GuidanceWrapper()

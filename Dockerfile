@@ -3,29 +3,15 @@ FROM nvidia/cuda:11.7.1-devel-ubuntu22.04
 # Update system
 RUN apt update && apt install -y python3-pip && apt install -y python3-venv
 
-# Configure Poetry
-ENV POETRY_VERSION=1.5.1
-ENV POETRY_HOME=/opt/poetry
-ENV POETRY_VENV=/opt/poetry-venv
-ENV POETRY_CACHE_DIR=/opt/.cache
-
-# Install poetry separated from system interpreter
-RUN python3 -m venv $POETRY_VENV \
-    && $POETRY_VENV/bin/pip install -U pip setuptools \
-    && $POETRY_VENV/bin/pip install poetry==${POETRY_VERSION}
-
-# Add `poetry` to PATH
-ENV PATH="${PATH}:${POETRY_VENV}/bin"
-
 WORKDIR /openbb-chat/
 
 # Add dependencies
-ADD poetry.lock /openbb-chat/poetry.lock
+ADD pdm.lock /openbb-chat/pdm.lock
 ADD pyproject.toml /openbb-chat/pyproject.toml
-RUN poetry install --no-root
 ADD openbb_chat /openbb-chat/openbb_chat
 ADD README.md /openbb-chat/README.md
-RUN poetry install --only-root
+RUN pip install --no-cache-dir setuptools==68.2.2 wheel==0.41.3 pdm==2.12.3 && \
+    pdm install --prod
 
 # Add project root
 ADD .project-root /openbb-chat/.project-root

@@ -67,18 +67,22 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-  "lightning>=2.0.0",
-  "torchmetrics>=0.11.4",
-  "hydra-core==1.*",
-  "hydra-colorlog==1.*",
-  "hydra-optuna-sweeper==1.*",
-  "wandb>=0.15.5",
+    "lightning>=2.0.0",
+    "torchmetrics>=0.11.4",
+    "hydra-core==1.*",
+    "hydra-colorlog==1.*",
+    "hydra-optuna-sweeper==1.*",
+    "wandb>=0.15.5",
+    "ipykernel>=6.29.3",
 ]
 tests = [
     "pytest>=8.0.2",
     "sentence-transformers>=2.2.2",
     "pytest-cov[toml]>=4.1.0",
     "torchvision>=0.17.1",
+    "pytest-asyncio>=0.23.5",
+    "duckduckgo-search>=4.5.0",
+    "wikipedia>=1.4.0",
 ]
 
 [project.urls]

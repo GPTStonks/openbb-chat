@@ -2,12 +2,7 @@ from abc import ABC, abstractmethod
 from typing import List, Tuple
 
 import torch
-from transformers import (
-    AutoModel,
-    AutoModelForSequenceClassification,
-    AutoTokenizer,
-    PreTrainedModel,
-)
+from transformers import AutoModel, AutoModelForSequenceClassification, AutoTokenizer
 
 
 class AbstractZeroshotClassifier(ABC):

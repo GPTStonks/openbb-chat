@@ -1,7 +1,6 @@
 from typing import List
 
 import torch
-from transformers import PreTrainedModel
 
 from openbb_chat.classifiers.abstract_zeroshot_classifier import (
     AbstractZeroshotClassifier,

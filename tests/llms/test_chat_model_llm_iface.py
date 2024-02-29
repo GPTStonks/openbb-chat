@@ -2,7 +2,6 @@ import os
 from collections import namedtuple
 from unittest.mock import patch
 
-import pytest
 from langchain.chat_models import ChatOpenAI
 
 from openbb_chat.llms.chat_model_llm_iface import ChatModelWithLLMIface

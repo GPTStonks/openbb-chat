@@ -115,7 +115,6 @@ class MNISTDataModule(LightningDataModule):
 
     def teardown(self, stage: Optional[str] = None):
         """Clean up after fit or test."""
-        pass
 
     def state_dict(self):
         """Extra things to save to checkpoint."""
@@ -123,7 +122,6 @@ class MNISTDataModule(LightningDataModule):
 
     def load_state_dict(self, state_dict: Dict[str, Any]):
         """Things to do when loading checkpoint."""
-        pass
 
 
 if __name__ == "__main__":

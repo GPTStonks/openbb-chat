@@ -1,6 +1,5 @@
 from unittest.mock import patch
 
-import pytest
 from llama_index.core import (
     ServiceContext,
     SimpleDirectoryReader,

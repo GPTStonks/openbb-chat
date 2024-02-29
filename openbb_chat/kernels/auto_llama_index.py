@@ -16,9 +16,6 @@ from llama_index.core.llms import LLM
 from llama_index.core.query_engine import RetrieverQueryEngine
 from llama_index.core.retrievers import VectorIndexRetriever
 from llama_index.core.schema import NodeWithScore
-from llama_index.core.storage.docstore import SimpleDocumentStore
-from llama_index.core.storage.index_store import SimpleIndexStore
-from llama_index.core.vector_stores import SimpleVectorStore
 from llama_index.llms.huggingface import HuggingFaceLLM
 from llama_index.llms.openai import OpenAI
 from llama_index.retrievers.bm25 import BM25Retriever

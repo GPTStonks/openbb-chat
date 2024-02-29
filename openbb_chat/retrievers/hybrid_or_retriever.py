@@ -1,5 +1,5 @@
 from llama_index.core.indices.query.schema import QueryType
-from llama_index.core.retrievers import BaseRetriever, VectorIndexRetriever
+from llama_index.core.retrievers import BaseRetriever
 
 
 class HybridORRetriever(BaseRetriever):

@@ -1,6 +1,5 @@
 import guidance
-import torch
-from transformers import AutoTokenizer, BitsAndBytesConfig
+from transformers import AutoTokenizer
 
 
 class GuidanceWrapper:

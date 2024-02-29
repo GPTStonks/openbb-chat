@@ -1,7 +1,5 @@
 from unittest.mock import patch
 
-import pytest
-
 from openbb_chat.llms.guidance_wrapper import GuidanceWrapper
 
 

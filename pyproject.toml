@@ -30,7 +30,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "openbb-chat"
-version = "0.0.11"
+version = "0.0.11.post1"
 description = "Deep learning package to add chat capabilities to OpenBB"
 authors = [
   { name="GPTStonks", email="gptstonks@gmail.com" }

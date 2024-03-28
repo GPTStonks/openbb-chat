@@ -43,6 +43,24 @@ classifiers = [
   "Operating System :: OS Independent",
 ]
 dependencies = [
+    "rank-bm25>=0.2.2",
+    "llama-index>=0.10.13",
+    "langchain>=0.0.353",
+    "llama-index-llms-openai>=0.1.6",
+    "llama-index-retrievers-bm25>=0.1.3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "lightning>=2.0.0",
+    "torchmetrics>=0.11.4",
+    "hydra-core==1.*",
+    "hydra-colorlog==1.*",
+    "hydra-optuna-sweeper==1.*",
+    "wandb>=0.15.5",
+    "ipykernel>=6.29.3",
+]
+advanced = [
     "torch==2.*",
     "pyrootutils>=1.0.4",
     "pre-commit>=3.3.3",
@@ -56,24 +74,10 @@ dependencies = [
     "guidance>=0.0.64",
     "auto-gptq>=0.4.2",
     "optimum>=1.12.0",
-    "rank-bm25>=0.2.2",
-    "llama-index>=0.10.13",
-    "langchain>=0.0.353",
-    "llama-index-llms-huggingface>=0.1.3",
-    "llama-index-llms-openai>=0.1.6",
-    "llama-index-retrievers-bm25>=0.1.3",
-    "llama-index-embeddings-huggingface>=0.1.3",
 ]
-
-[project.optional-dependencies]
-dev = [
-    "lightning>=2.0.0",
-    "torchmetrics>=0.11.4",
-    "hydra-core==1.*",
-    "hydra-colorlog==1.*",
-    "hydra-optuna-sweeper==1.*",
-    "wandb>=0.15.5",
-    "ipykernel>=6.29.3",
+huggingface = [
+  "llama-index-embeddings-huggingface>=0.1.3",
+  "llama-index-llms-huggingface>=0.1.3",
 ]
 tests = [
     "pytest>=8.0.2",

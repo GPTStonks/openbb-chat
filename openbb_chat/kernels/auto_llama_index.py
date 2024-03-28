@@ -16,7 +16,11 @@ from llama_index.core.llms import LLM
 from llama_index.core.query_engine import RetrieverQueryEngine
 from llama_index.core.retrievers import VectorIndexRetriever
 from llama_index.core.schema import NodeWithScore
-from llama_index.llms.huggingface import HuggingFaceLLM
+
+try:
+    from llama_index.llms.huggingface import HuggingFaceLLM
+except Exception as e:
+    print("Warning: HuggingFaceLLM not imported, so HuggingFace models are not available")
 from llama_index.llms.openai import OpenAI
 from llama_index.retrievers.bm25 import BM25Retriever
 from pydantic import BaseModel
